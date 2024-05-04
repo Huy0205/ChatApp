@@ -1,0 +1,128 @@
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#chat_container {
+    position: relative;
+    .loading_pending_messageSend {
+        position: absolute;
+        border: 4px solid #6f6a6a;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 0.5s linear infinite;
+        bottom: 92px;
+        right: 20px;
+    }
+    .background_conversation {
+        &::after {
+        }
+    }
+
+    width: 595px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 16px;
+        align-items: center;
+        background: none !important;
+    }
+    .avatar {
+        width: 48px;
+        height: 48px;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    }
+    .infor {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .status {
+        color: #7589a3;
+        font-size: 0.857rem;
+        font-weight: 400;
+    }
+
+    .chat_content {
+        z-index: 0;
+        flex: 1;
+        background: #9aa3af24;
+        padding: 5px 0px 0px 15px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column-reverse;
+        .wrapper_scroll {
+            padding: 54px 35px 5px 5px;
+            z-index: 9999;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 15px;
+        }
+    }
+
+    .chat_input_container {
+        background: none !important;
+        .EmojiPickerReact {
+            position: absolute;
+            z-index: 999999;
+            top: 0;
+            right: 55px;
+            top: -500px;
+        }
+        height: 90px;
+        display: flex;
+
+        flex-direction: column;
+        .actions {
+            border-top: 1px solid #cccbcb;
+            border-bottom: 1px solid blue;
+            display: flex;
+            padding: 3px 0px 3px 10px;
+            .action_btn {
+                max-width: 37px;
+                min-width: 37px;
+                height: 40px;
+                padding: 7px;
+                border-radius: 6px;
+                font-size: 20px;
+            }
+        }
+
+        .chat_input {
+            flex: 1;
+            align-items: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            input {
+                width: 100%;
+                height: 100%;
+                border-radius: 6px;
+                border: none;
+                outline: none;
+                padding: 0 16px;
+                font-size: 0.875rem;
+                font-weight: 400;
+                line-height: 1.5;
+                background: none !important;
+                box-sizing: border-box;
+                color: var(--text-primary);
+            }
+        }
+    }
+}

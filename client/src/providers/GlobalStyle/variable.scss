@@ -1,0 +1,86 @@
+:root {
+    --primary-blue: rgb(0, 0, 255);
+    --secondary-blue: rgb(96, 96, 182);
+
+    --text-primary-light: black;
+    --text-primary-dark: white;
+
+    --text-secondary-light: rgb(70, 70, 70);
+    --text-secondary-dark: rgb(160, 160, 160);
+
+    --bg-primary-light: #ffffff;
+    --bg-primary-dark: #313131;
+
+    --bg-secondary-light: white;
+    --bg-secondary-dark: #00304d;
+
+    --bg-navbar-light: #0091ff;
+    --bg-navbar-dark: #191919;
+
+    --bg-active-dark: #404952;
+    --bg-active-light: #006edc;
+
+    --bg-hover-conversationItem-light: #f3f5f6;
+    --bg-hover-conversationItem-dark: #080808;
+
+    --bg-search-input-light: #eaedf0;
+    --bg-search-input-dark: #919191;
+
+    --bg-btn-close--light: #ffffff;
+    --bg-btn-close--dark: 606060;
+
+    --bg-btn-close-hover--light: #eaedf0;
+    --bg-btn-close-hover--dark: #606060;
+
+    --text-btn-close--light: #000000;
+    --text-btn-close--dark: #ffffff;
+
+    --bg-active-conversation-item--light: #f5f5f5;
+    --bg-active-conversation-item--dark: #757575;
+
+    --color-icon-dark: #ffffff;
+    --color-icon-light: #000000;
+
+    --text-hover-icon-light: #000000;
+
+
+    --bg-btn-choose-image-light:#005ae0;
+    --bg-btn-choose-image-dark: #171717;
+
+}
+
+.light-theme {
+    --color-icon: var(--color-icon-light);
+    --text-hover-icon: var(--text-hover-icon-light);
+    --bg-active-conversation-item: var(--bg-active-conversation-item--light);
+    --text-btn-close: var(--text-btn-close--light);
+    --bg-btn-close-hover: var(--bg-btn-close-hover--light);
+    --bg-btn-close: var(--bg-btn-close--light);
+    --bg-input-search: var(--bg-search-input-light);
+    --text-primary: var(--text-primary-light);
+    --text-secondary: var(--text-secondary-light);
+    --bg-primary: var(--bg-primary-light);
+    --bg-secondary: var(--bg-secondary-light);
+    --bg-navbar: var(--bg-navbar-light);
+    --bg-active: var(--bg-active-light);
+    --bg-hover-conversationItem: var(--bg-hover-conversationItem-light);
+    --bg-btn-choose-image:var(--bg-btn-choose-image-light);
+}
+
+.dark-theme {
+    --color-icon: var(--color-icon-dark);
+    --text-hover-icon: var(--text-hover-icon-light);
+    --bg-active-conversation-item: var(--bg-active-conversation-item--dark);
+    --text-btn-close: var(--text-btn-close--dark);
+    --bg-btn-close-hover: var(--bg-btn-close-hover--dark);
+    --bg-btn-close: var(--bg-btn-close--dark);
+    --bg-input-search: var(--bg-search-input-dark);
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --bg-primary: var(--bg-primary-dark);
+    --bg-secondary: var(--bg-secondary-dark);
+    --bg-navbar: var(--bg-navbar-dark);
+    --bg-active: var(--bg-active-dark);
+    --bg-hover-conversationItem: var(--bg-hover-conversationItem-dark);
+    --bg-btn-choose-image:var(--bg-btn-choose-image-dark);
+}
