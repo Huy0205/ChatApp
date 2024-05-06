@@ -6,6 +6,7 @@ const io = require("socket.io")(9000, {
       "exp://192.168.1.17:8081",
       "http://localhost:8081",
       "exp://192.168.1.7:8081",
+      "exp://192.168.1.22:8081",
     ],
   },
 });
@@ -124,7 +125,7 @@ io.on("connection", (socket) => {
       });
   });
   socket.on("reRenderConversations", (members) => {
-    console.log('reRenderConversations :>> ', members);
+    console.log("reRenderConversations :>> ", members);
     users
       .filter((user) => members.includes(user.userId))
       .forEach((user) => {

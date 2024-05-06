@@ -168,3 +168,21 @@ export const updateImageUser = async (_id, imgURL) => {
     console.log(error);
   }
 };
+
+export const updateBlocks = async (currentUserId, userIdBlock) => {
+  try {
+    // nếu userIdBlock đã tồn tại trong mảng blocks của currentUserId thì xóa userIdBlock ra khỏi mảng
+    // nếu userIdBlock chưa tồn tại thì thêm userIdBlock vào mảng
+    // return về true nếu thêm hoặc xóa thành công, false nếu không thực hiện được
+    return await UserModel.findOneAndUpdate(
+      { _id: currentUserId },
+      {
+        $pull: { blocks: userIdBlock },
+        $addToSet: { blocks: userIdBlock },
+      },
+      { new: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
