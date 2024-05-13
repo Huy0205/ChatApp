@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useLang } from '../../../hooks';
 import { toast } from 'react-hot-toast';
 import * as authServices from '../../../services/authService';
-export default function FormRegister({ onSuccess,setIsAuthPhone }) {
+export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister }) {
     const { t } = useLang();
 
     const [phone, setPhone] = useState('');
@@ -42,7 +42,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone }) {
             });
             toast.success(res.message);
 
-            onSuccess();
+            onSuccess(phone);
         } catch (error) {
             console.log(error);
             toast.success(error.data.message || 'Register failed');
@@ -73,7 +73,8 @@ export default function FormRegister({ onSuccess,setIsAuthPhone }) {
         }
     }
 
-    //hàm gửi otp
+
+    
     async function onSignup() {
         try {
             if (!checkValidPhoneNumber(`${phone}`, 'VN')) {

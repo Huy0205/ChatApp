@@ -3,19 +3,30 @@ import './formLogin.scss';
 import PhoneInput from 'react-phone-input-2';
 import clsx from 'clsx';
 import * as authServices from '../../../services/authService';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { useLang } from '../../../hooks';
 import { toast, Toaster } from 'react-hot-toast';
 import { AuthContext } from '../../../providers/Auth/AuthProvider';
 import { checkValidPhoneNumber } from '../../../utils/phoneUltil';
 import Loading from '../../../components/Loading/Loading';
 import Overlay from '../../../components/Overlay/Overlay';
-export default function FormLogin({}) {
+import { use } from 'i18next';
+import { ref } from 'firebase/storage';
+export default function FormLogin({ phoneRegister }) {
     const { i18n, t } = useLang();
-    const [phonenumber, setPhone] = useState('');
+    const [phonenumber, setPhone] = useState(phoneRegister);
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const refPassword = useRef();
     const { login, getUser } = useContext(AuthContext);
+
+
+    useEffect(() => {
+       if(phoneRegister){
+        setPhone(`+${phoneRegister}`);
+        refPassword.current.focus();
+       }
+    }, [phoneRegister]);
 
     const handleLogin = async () => {
         try {
@@ -23,6 +34,7 @@ export default function FormLogin({}) {
                 toast.error('Số điện thoại không đúng định dạng hoặc không hợp lệ!!!');
                 return;
             }
+
             setIsLoading(true);
             const res = await authServices.login({ phonenumber, password });
 
@@ -32,6 +44,7 @@ export default function FormLogin({}) {
                 return;
             }
             toast.error(res.message);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -66,6 +79,7 @@ export default function FormLogin({}) {
                     <i className="fa-solid fa-lock"></i>
                 </span>
                 <input
+                    ref={refPassword}
                     value={password}
                     onChange={(e) => {
                         setPassword(e.target.value);

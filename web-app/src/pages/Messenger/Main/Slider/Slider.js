@@ -5,10 +5,10 @@ import React, { useEffect } from 'react'; // Import React and useEffect hook
 
 export default function Slider() {
 
-  // useEffect(() => {
-  //   const nextSlide = document.getElementById('next_slide');
-  //   nextSlide.click();
-  // }, [])
+  useEffect(() => {
+    const nextSlide = document.getElementById('next_slide');
+    nextSlide.click();
+  }, [])
   return (
     <div className="wp_slider position-relative">
       <div className="header_slider" style={{ position: 'absolute', top: "80px" }}>
@@ -23,7 +23,7 @@ export default function Slider() {
           <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
         <div className="carousel-inner">
-          <div className="carousel-item active" data-bs-interval="5000">
+          <div className="carousel-item active" data-bs-interval="3000">
             <img src="https://chat.zalo.me/assets/quick-message-onboard.3950179c175f636e91e3169b65d1b3e2.png" className="d-block w-100" alt="..." />
             <div className="carousel-caption d-none d-md-block">
               <h5 className="text-primary mb-2 fw-bold">Nhắn tin nhiều hơn, soạn thảo ít hơn</h5>
