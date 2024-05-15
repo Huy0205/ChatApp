@@ -11,5 +11,9 @@ export const createConversation = async (senderid, recieverid, type) => {
 //api get all cuộc trò truyện của user theo id
 //tham số truyền vô dạng:getConversationByUserId("abc")
 export const getConversationByUserId = async (senderid) => {
-    return axios.get(`/conversation/${senderid}`);
+    return axios.get(`/conversation/user/${senderid}`);
+};
+
+export const getConversationById = async (conversationid) => {
+    return axios.get(`/conversation/${conversationid}`);
 };

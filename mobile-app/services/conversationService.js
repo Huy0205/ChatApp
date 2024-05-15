@@ -6,5 +6,5 @@ export const createConversation = async (senderid, recieverid,type) => {
 
 
 export const getConversationByUserId = async (senderid) => {
-    return axios.get(`/conversation/${senderid}`);
+    return axios.get(`/conversation/user/${senderid}`);
 };

@@ -155,7 +155,7 @@ const Chat = () => {
                     icon: faArrowLeftLong,
                     text: 'Trở về',
                     onPress: () => {
-                        socket.emit('reRenderConversations', conversation.recieveInfor.members); // render lại Conversations
+                        socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,conversationId:conversation._id}); // render lại Conversations
                         navigation.goBack();
                     },
                 }}

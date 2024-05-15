@@ -3,14 +3,15 @@ import ManuItemPopper from '../MenuItemPopper/MenuItemPopper';
 import { useContext } from 'react';
 import { socketContext } from '../../../providers/Socket/SocketProvider';
 import * as messagesService from '../../../services/messageService';
+
 export default function ActionMessagePopper({ content, idMessage, data, own }) {
-    const { socket } = useContext(socketContext);
+    const { socket, currentUserId } = useContext(socketContext);
 
     const handledeleteMessage = async () => {
         try {
-
-
             const new_message = await messagesService.deleteMessage(idMessage);
+            await messagesService.updateLastMessage(data.conversationId, 'đã xóa 1 tin nhắn', currentUserId);
+          
             socket.emit('delete-message', {
                 ...data,
                 new_message,
@@ -22,8 +23,8 @@ export default function ActionMessagePopper({ content, idMessage, data, own }) {
 
     const handleDeleteMySeftMessage = async () => {
         try {
-
             const new_message = await messagesService.recallMessage(idMessage);
+            await messagesService.updateLastMessage(data.conversationId, 'đã thu hồi 1 tin nhắn', currentUserId);
             socket.emit('recall-message', {
                 ...data,
                 new_message,
@@ -40,7 +41,7 @@ export default function ActionMessagePopper({ content, idMessage, data, own }) {
                 navigator.clipboard.writeText(content);
             },
         },
-        { title: 'xem chi tiết', Icon: <i class="fa-solid fa-circle-info"></i>, callback: () => { } },
+        { title: 'xem chi tiết', Icon: <i class="fa-solid fa-circle-info"></i>, callback: () => {} },
         { title: 'thu hồi tin nhắn', Icon: <i class="fa-solid fa-recycle"></i>, callback: handledeleteMessage },
         { title: 'xóa chỉ ở phía tôi', Icon: <i class="fa-solid fa-trash"></i>, callback: handleDeleteMySeftMessage },
     ];

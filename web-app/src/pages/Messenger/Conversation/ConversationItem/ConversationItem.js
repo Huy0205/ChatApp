@@ -39,7 +39,7 @@ function ConversationItem({
     }, [openPopper]);
 
     useEffect(() => {
-
+        console.log('members', members);
         const fetchMember = async () => {
             try {
                 if (isGroup) {
@@ -50,14 +50,14 @@ function ConversationItem({
                 }
                 const recieverid = members.find((id) => id !== currentUserId);
                 const user = await userService.getUserById(recieverid);
-
+              
                 setUserOrGroup(user);
             } catch (err) {
                 console.log(err);
             }
         };
         fetchMember();
-    }, [members, conversationId, activeConversation]);
+    }, [members]);
 
     return (
         <div
