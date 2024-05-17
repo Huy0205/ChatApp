@@ -298,7 +298,7 @@ function Chat() {
     //đăng kí socket nhận tin nhắn đã xóa
     useEffect(() => {
         const onMessageDelete = async ({ conversationId, new_message, senderId }) => {
-            socket.emit('reRenderConversations', conversation.recieveInfor.members);
+          
             if (conversationId === conversation._id) {
                 setMessages((prev) => {
                     prev.forEach((message) => {
@@ -318,7 +318,7 @@ function Chat() {
     // đăng kí socket nhận tin nhắn đã thu hồi
     useEffect(() => {
         const onRecallMessage = async ({ conversationId, new_message, senderId }) => {
-            socket.emit('reRenderConversations', conversation.recieveInfor.members);
+        
             if (conversationId === conversation._id) {
                 setMessages((prev) => {
                     prev.forEach((message) => {
@@ -388,7 +388,7 @@ function Chat() {
 
             await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
-            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage:content,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
+            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
             socket.emit('sendMessage', { ...data, new_message }); // gửi socket
             setTextMessage('');
 
