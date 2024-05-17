@@ -11,7 +11,7 @@ export default function ActionMessagePopper({ content, idMessage, data, own,conv
         try {
             const new_message = await messagesService.deleteMessage(idMessage);
             await messagesService.updateLastMessage(data.conversationId, 'đã xóa 1 tin nhắn', currentUserId);
-            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage:"đã xóa 1 tin nhắn",unseen:0,conversationId:data.conversationId,sendAt:new Date().toISOString()});
+          
             socket.emit('delete-message', {
                 ...data,
                 new_message,
@@ -25,6 +25,7 @@ export default function ActionMessagePopper({ content, idMessage, data, own,conv
         try {
             const new_message = await messagesService.recallMessage(idMessage);
             await messagesService.updateLastMessage(data.conversationId, 'đã thu hồi 1 tin nhắn', currentUserId);
+            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage:"đã thu hồi 1 tin nhắn",unseen:0,conversationId:data.conversationId,sendAt:new Date().toISOString()});
             socket.emit('recall-message', {
                 ...data,
                 new_message,
