@@ -16,9 +16,6 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
     const [emojis, setEmojis] = useState({ emojis: '', index: 0 });
     const {setPreviewFile} = useContext(PreviewContext);
 
-
- 
-
     const handleStyleTypeMessage = (type) => {
         switch (type) {
             case 'text':

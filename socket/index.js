@@ -45,10 +45,6 @@ io.on("connection", (socket) => {
   socket.on(
     "sendMessage",
     ({ senderId, conversationId, new_message, members }) => {
-      console.log("members :>>>", members);
-      console.log("senderId :>>>", senderId);
-      console.log("conversationId :>>>", conversationId);
-      console.log("new_message :>>>", new_message);
       members
         .filter((member) => member != senderId)
         .forEach((member) => {
@@ -125,20 +121,34 @@ io.on("connection", (socket) => {
         }
       });
   });
-  socket.on("reRenderConversations", (members) => {
-    console.log("reRenderConversations :>> ", members);
-    users
-      .filter((user) => members.includes(user.userId))
-      .forEach((user) => {
-        io.to(user.socketId).emit("reRenderConversations");
-      });
-  });
-  socket.on("sendRequestFriend", ({ recieverId }) => {
-    const reciever = getUser(recieverId);
-    if (reciever) {
-      io.to(reciever.socketId).emit("getFriendRequest");
+  socket.on(
+    "reRenderConversations",
+    ({ members, conversationId, unseen, lastMessage, sendAt }) => {
+      console.log("sendAt :>> ", sendAt);
+      users
+        .filter((user) => members.includes(user.userId))
+        .forEach((user) => {
+          io.to(user.socketId).emit("reRenderConversations", {
+            conversationId,
+            unseen,
+            lastMessage,
+            sendAt,
+          });
+        });
     }
-  });
+  );
+  socket.on(
+    "sendRequestFriend",
+    ({ recieverId }) => {
+      const reciever = getUser(recieverId);
+      if (reciever) {
+        io.to(reciever.socketId).emit("getFriendRequest");
+      }
+    },
+    (c) => {
+      console.log("c :>> ", c);
+    }
+  );
 
   socket.on("acceptFriendRequest", (senderId) => {
     const sender = getUser(senderId);

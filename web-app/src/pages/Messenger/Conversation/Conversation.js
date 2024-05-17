@@ -9,7 +9,7 @@ import { socketContext } from '../../../providers/Socket/SocketProvider';
 import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
 import { useLang } from '../../../hooks';
 import { timeDuaration } from '../../../utils/chatUtil';
-import useViewport from '../../../hooks/useViewPort';
+
 import { ViewPortContext } from '../../../providers/ViewPort/ViewPortProvider';
 
 const Conversation = () => {
@@ -31,37 +31,85 @@ const Conversation = () => {
                 const conversationID = conversations[i]._id;
                 conversations[i].timeDuaration = timeDuaration(conversations[i].updatedAt);
                 //get toàn bộ message của conversation tương ứng
-                const messages = await messageService.getMessageByConversationId(conversationID);
-                let totalUnseen = 0;
 
-                for (let j = 0; j < messages.length; j++) {
-                    //duyệt từng messages của conversation đó->nếu người gửi không phải mình
-                    // và  mảng isSeen  chưa có mình  thì tăng biến totalUnseen lên 1
-                    if (messages[j].senderId._id !== currentUserId && !messages[j].isSeen.includes(currentUserId)) {
-                        totalUnseen = totalUnseen + 1;
-                    }
-                }
+                const totalUnseen = await messageService.countUnseenMessage(conversationID, currentUserId);
+
                 //thêm trường totalUnseen vào mảng object conversation
-                conversations[i].totalUnseen = totalUnseen;
+                conversations[i].totalUnseen = typeof totalUnseen === 'number' ? totalUnseen : totalUnseen.data;
+                console.log('totalUnseen>>', conversations[i].totalUnseen);
             }
+            console.log('conversations in fet', conversations);
             setConversations([...conversations]);
         } catch (err) {
             console.log(err);
         }
     };
 
-    useEffect(() => {
-        let timeOut = setTimeout(() => {
-            fetchConversations();
-        }, 60000);
+    // useEffect(() => {
+    //     let timeOut = setTimeout(() => {
+    //         fetchConversations();
+    //     }, 60000);
 
-        return () => {
-            clearTimeout(timeOut);
-        };
-    }, []);
+    //     return () => {
+    //         clearTimeout(timeOut);
+    //     };
+    // }, []);
+
+    const handleRerenderConversation = async (conversationId, unseen, lastmessage, sendAt) => {
+        let i = 0;
+        let flag = false;
+        console.log("conversations", conversations);
+        conversations.forEach((con, index) => {
+
+            if (con._id === conversationId) {
+                i = index;
+                flag = true;
+                const totalunseen = con.totalUnseen;
+               
+                console.log("currentConversation", conversation._id);
+                if (conversation._id == conversationId) {
+                    con.totalUnseen = 0;
+             
+                    
+                } else {
+                    con.totalUnseen = unseen + totalunseen;
+                }
+                con.lastMessage = lastmessage ? lastmessage : con.lastMessage;
+                con.timeDuaration = sendAt ? timeDuaration(sendAt) : con.timeDuaration;
+                console.log('con.timeDuaration', con.timeDuaration);
+            }
+        });
+
+        if (!flag) {
+            const new_conversation = await conversationService.getConversationById(conversationId);
+            new_conversation.timeDuaration = timeDuaration(new_conversation.updatedAt);
+            new_conversation.totalUnseen = new_conversation.lastSenderid === currentUserId ? 0 : unseen;
+            if (new_conversation.lastMessage) {
+                conversations.unshift(new_conversation);
+
+                setConversations((prev) => [...prev]);
+                return;
+            }
+        } else {
+            if (!unseen && !lastmessage) {
+                setConversations((prev) => [...prev]);
+                return;
+            }
+
+            let newArray = [];
+            if (i >= 0 && i < conversations.length) {
+                let element = conversations[i]; // Lấy phần tử tại chỉ số đó
+                newArray = [element, ...conversations.slice(0, i), ...conversations.slice(i + 1)]; // Tạo mảng mới với phần tử được di chuyển lên đầu
+            }
+            newArray.length > 0 && setConversations([...newArray]);
+            return;
+        }
+        setConversations((prev) => [...prev]);
+    };
+
     useEffect(() => {
-        const onRerenderConversations = () => {
-            fetchConversations();
+        const onRerenderConversations = ({ conversationId, unseen, lastMessage, sendAt }) => {
+            handleRerenderConversation(conversationId, unseen, lastMessage, sendAt);
             setActiveConversation(conversation._id);
         };
         socket.on('reRenderConversations', onRerenderConversations);
@@ -69,7 +117,7 @@ const Conversation = () => {
         return () => {
             socket.off('reRenderConversations', onRerenderConversations);
         };
-    }, []);
+    }, [conversations, conversation._id]);
 
     useEffect(() => {
         if (activeFilter) {

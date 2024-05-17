@@ -77,20 +77,20 @@ function ModalCreateGroup({ onHide, user, group }) {
         try {
             let members;
             let userIds = selectUser.map((m) => m._id);
+
             if (group) {
                 try {
                     members = [...userIds];
                     const groupid = group._id;
                     await groupServices.addUserToGroup(groupid, members);
 
-                    setMembers(members)
+                    setMembers(members);
 
-                    socket.emit('addUserToGroup',
-                        {
-                            userInvited: currentUser.username,
-                            members: [...members, ...getMembers()],
-                            newMembers: selectUser
-                        });
+                    socket.emit('addUserToGroup', {
+                        userInvited: currentUser.username,
+                        members: [...members, ...getMembers()],
+                        newMembers: selectUser,
+                    });
                     toast.success('Thêm thành viên vào nhóm thành công !!');
                 } catch (error) {
                     console.error(error);
@@ -103,23 +103,26 @@ function ModalCreateGroup({ onHide, user, group }) {
                     members,
                     currentUserId,
                     imageGroupFromDevice ||
-                    imgGroup ||
-                    'https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png',
+                        imgGroup ||
+                        'https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png',
                 );
-                const conversation = await conversationServices.createConversation(group._id, members, 1);
+                var new_conversation = await conversationServices.createConversation(group._id, members, 1);
                 setCurrentConversation(
                     group.groupPicture,
                     group.groupName,
                     group._id,
                     true,
                     group.members,
-                    conversation._id,
+                    new_conversation._id,
                 );
                 toast.success('Tạo nhóm thành công');
             }
-
-            socket.emit('reRenderConversations', members);
-
+            socket.emit('reRenderConversations', {
+                members: members,
+                unseen: 1,
+                conversationId: new_conversation._id ||conversation._id,
+                sendAt: new Date().toISOString(),
+            });
         } catch (error) {
             console.log(error);
             toast.error(error);
@@ -134,7 +137,7 @@ function ModalCreateGroup({ onHide, user, group }) {
                     onHide={() => setShowModalSetImageGroup(false)}
                 />
             )}
-            <div id="modalCreateGroup" className='modalGroup'>
+            <div id="modalCreateGroup" className="modalGroup">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -236,7 +239,9 @@ function ModalCreateGroup({ onHide, user, group }) {
                                 }}
                                 type="button"
                                 className="btn btn-primary"
-                                disabled={group ? selectUser.length < 1 : groupName.length === 0 || selectUser.length < 2}
+                                disabled={
+                                    group ? selectUser.length < 1 : groupName.length === 0 || selectUser.length < 2
+                                }
                             >
                                 Save changes
                             </button>

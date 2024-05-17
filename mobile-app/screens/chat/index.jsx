@@ -222,7 +222,7 @@ const Chat = ({ route }) => {
                 left={{
                     icon: faArrowLeftLong,
                     onPress: () => {
-                        socket.emit('reRenderConversations', conversation.recieveInfor.members); // render lại Conversations
+                        socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,conversationId:conversation._id}); // render lại Conversations
                         navigation.goBack();
                     },
                     avatarUri: route.params.avatar,

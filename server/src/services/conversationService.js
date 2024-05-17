@@ -86,3 +86,14 @@ export const updateLastMessage = async (conversationId, lastMessage, senderid) =
     console.log(error);
   }
 };
+
+
+export const getConversationByid = async (id) => {
+  try {
+
+    const conversation= await ConversationModel.findById(id);
+    return conversation;
+  } catch (error) {
+    console.log(error);
+  }
+};

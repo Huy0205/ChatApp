@@ -7,7 +7,7 @@ function SocketProvider({children}) {
     const {getUser}=useContext(AuthContext);
     const user=getUser().data;
     console.log("re-render");
-  const  socket = io('https://socketzaloclone.onrender.com');
+  const  socket = io('ws://localhost:9000');
 
     useEffect(() => {
         if(!user._id) return

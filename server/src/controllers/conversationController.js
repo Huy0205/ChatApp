@@ -25,6 +25,16 @@ export const handleGetConversation = async (req, res) => {
   return res.status(500).json({ message: "Internal Server Error" });
 
 }
+export const handleGetConversationById = async (req, res) => {
+  const { id } = req.params;
+ 
+  const data = await conversationService.getConversationByid(id);
+  if (data) {
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+
+}
 
 export const handleUpdateLastMessage = async (req, res) => {
 

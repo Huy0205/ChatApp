@@ -123,8 +123,10 @@ function Chat() {
             console.log(error);
         }
     };
+    
     const handleDataMessages = async (messages) => {
         try {
+          
             let ReceivedMessage = [];
             let sendMessage = [];
             const components = [];
@@ -203,9 +205,9 @@ function Chat() {
             }
 
             // update status seen message
-            senderId && (await messageService.updateStatus(senderId, conversation._id, currentUserId));
+            senderId && (await messageService.updateSeenMessages(conversation._id, currentUserId));
             setMessagesComponent([...components]);
-            socket.emit('reRenderConversations', [currentUserId]);
+    
         } catch (error) {
             console.log(error);
         }
@@ -214,6 +216,7 @@ function Chat() {
     const fetchMessage = async () => {
         if (conversation._id) {
             try {
+                console.log("call api with",conversation._id);
                 const messages = await messageService.getMessageByConversationId(conversation._id);
                 setMessages(messages);
             } catch (error) {
@@ -272,10 +275,9 @@ function Chat() {
     }, [conversation._id]);
     // đăng kí socket nhận emoji tin nhắn
     useEffect(() => {
+        socket.emit('reRenderConversations', {members:[currentUserId],conversationId:conversation._id,unseen:0});
         const onMessageEmoji = ({ conversationId, new_message }) => {
             if (conversationId === conversation._id) {
-                //
-
                 setMessages((prev) => {
                     prev.forEach((message) => {
                         if (message._id === new_message._id) {
@@ -296,10 +298,8 @@ function Chat() {
     //đăng kí socket nhận tin nhắn đã xóa
     useEffect(() => {
         const onMessageDelete = async ({ conversationId, new_message, senderId }) => {
+            socket.emit('reRenderConversations', conversation.recieveInfor.members);
             if (conversationId === conversation._id) {
-                //
-                await messageService.updateLastMessage(conversationId, 'đã xóa 1 tin nhắn', senderId);
-                socket.emit('reRenderConversations', conversation.recieveInfor.members);
                 setMessages((prev) => {
                     prev.forEach((message) => {
                         if (message._id === new_message._id) {
@@ -318,16 +318,18 @@ function Chat() {
     // đăng kí socket nhận tin nhắn đã thu hồi
     useEffect(() => {
         const onRecallMessage = async ({ conversationId, new_message, senderId }) => {
-            await messageService.updateLastMessage(conversationId, 'đã thu hồi 1 tin nhắn', senderId);
             socket.emit('reRenderConversations', conversation.recieveInfor.members);
-            setMessages((prev) => {
-                prev.forEach((message) => {
-                    if (message._id === new_message._id) {
-                        message.isRecall = new_message.isRecall;
-                    }
+            if (conversationId === conversation._id) {
+                setMessages((prev) => {
+                    prev.forEach((message) => {
+                        if (message._id === new_message._id) {
+                            message.isRecall = new_message.isRecall;
+                        }
+                    });
+                    return [...prev];
                 });
-                return [...prev];
-            });
+            }
+          
         };
 
         socket.on('getRecallMessage', onRecallMessage);
@@ -386,8 +388,8 @@ function Chat() {
 
             await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
+            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage:content,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
             socket.emit('sendMessage', { ...data, new_message }); // gửi socket
-            socket.emit('reRenderConversations', conversation.recieveInfor.members);
             setTextMessage('');
 
             refInput.current.focus();

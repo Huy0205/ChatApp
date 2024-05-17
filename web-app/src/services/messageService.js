@@ -25,6 +25,9 @@ export const updateStatus = (senderId, conversationId, receiverId) => {
 export const updateLastMessage = (conversationId, content, senderid) => {
     return axios.put(`/conversation/${conversationId}?lastMessage=${content}&senderid=${senderid}`);
 }
+export const updateSeenMessages = (conversationId, userId) => {
+    return axios.post('/message/updateSeen', { conversationId, userId });
+};
 
 //api upload ảnh tin nhắn
 //tham số truyền vô dạng:uploadImageMessage(formData)
@@ -38,6 +41,11 @@ export const uploadImageMessage = (data) => {
 //tham số truyền vô dạng:uploadFileMessage(formData)
 //api này sẽ trả về 1 url file
 // sau đó gửi gọi api gửi tin nhắn url này
+
+
+export const countUnseenMessage = (conversationId, userId) => {
+    return axios.post('/message/unseen/count', { conversationId, userId });
+};
 
 
 export const uploadFileMessage = (formData) => {

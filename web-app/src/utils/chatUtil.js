@@ -1,4 +1,3 @@
-
 function formatDateString(dateString) {
     var inputDate = new Date(dateString);
     var today = new Date();
@@ -8,7 +7,7 @@ function formatDateString(dateString) {
         inputDate.getMonth() === today.getMonth() &&
         inputDate.getFullYear() === today.getFullYear()
     ) {
-        return "hôm nay";
+        return 'hôm nay';
     } else {
         var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         return inputDate.toLocaleDateString('en-US', options);
@@ -28,7 +27,6 @@ function chuyenDoiThoiGian(timeString) {
     return chuoiThoiGian;
 }
 
-
 function formatTimeDifference(timeDifference) {
     let seconds = Math.floor(timeDifference / 1000);
     let minutes = Math.floor(seconds / 60);
@@ -38,11 +36,11 @@ function formatTimeDifference(timeDifference) {
     seconds %= 60;
     minutes %= 60;
     hours %= 24;
-    let lang = localStorage.getItem('language')
-    const day = lang === 'en' ? 'day' : 'ngày'
-    const hour = lang === 'en' ? 'hour' : 'giờ'
-    const minute = lang === 'en' ? 'minute' : 'phút'
-    const second = lang === 'en' ? 'second' : 'giây'
+    let lang = localStorage.getItem('language');
+    const day = lang === 'en' ? 'day' : 'ngày';
+    const hour = lang === 'en' ? 'hour' : 'giờ';
+    const minute = lang === 'en' ? 'minute' : 'phút';
+    const second = lang === 'en' ? 'second' : 'giây';
     if (days > 0) {
         return `${days} ${day}`;
     } else if (hours > 0) {
@@ -52,22 +50,20 @@ function formatTimeDifference(timeDifference) {
     } else {
         return `${seconds} ${second}`;
     }
-
-
 }
 
-
-const timeDuaration = (time) => {
-    let currentTime = new Date(time);
+const timeDuaration = (time, type = 'render') => {
+    let currentTime;
+    if (type == 'render') {
+        currentTime = new Date(time);
+    } else {
+        currentTime = time;
+    }
     let now = new Date();
 
     let timeDifference = now - currentTime;
 
     return formatTimeDifference(timeDifference);
-}
+};
 
-
-
-
-
-export { formatDateString, chuyenDoiThoiGian, timeDuaration }
+export { formatDateString, chuyenDoiThoiGian, timeDuaration };
