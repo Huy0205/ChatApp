@@ -165,6 +165,7 @@ const Chat = ({ route }) => {
     // Nhận tin nhắn
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
+            
             if (conversationId === conversation._id) {
                 new_message.prevSenderId = messages.length > 0 ? messages[0].senderId._id : null;
                 setMessages((prev) => [new_message, ...prev]);

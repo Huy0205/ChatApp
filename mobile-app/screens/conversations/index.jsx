@@ -22,6 +22,7 @@ const Conversations = () => {
 
     const onRerenderConversations = useCallback(async () => {
         try {
+            console.log('rerender >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
             const conversations = await ConversationService.getConversationByUserId(currentUserId);
             let total = 0;
             for (const conversation of conversations) {

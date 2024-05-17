@@ -37,7 +37,7 @@ export default function FormLogin({ phoneRegister }) {
 
             setIsLoading(true);
             const res = await authServices.login({ phonenumber, password });
-
+            console.log(res);
             if (res.errCode === 0) {
                 login();
                 toast.success(res.message);
