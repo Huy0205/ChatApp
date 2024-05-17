@@ -387,15 +387,8 @@ function Chat() {
 
             await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
-<<<<<<< HEAD
+ư
             socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
-=======
-<<<<<<< HEAD
-            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
-=======
-            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage:content,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
->>>>>>> 36f7a2b12676687c111e5a19330b161d24576352
->>>>>>> 685dd74207344fdc0a52a22177cb79175c450082
             socket.emit('sendMessage', { ...data, new_message }); // gửi socket
             setTextMessage('');
 
