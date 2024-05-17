@@ -11,19 +11,16 @@ import * as ConversationService from '../../services/conversationService';
 import * as MessageService from '../../services/messageService';
 import * as UserService from '../../services/userService';
 import * as GroupService from '../../services/groupService';
-import Footer from '../../components/footer';
 import LoadingIndicator from '../../components/loadingIndicator';
+import { UnseenMessagesContext } from '../../providers/UnseenMessages/UnseenMessages';
 
 const Conversations = () => {
     const navigation = useNavigation();
     const [conversations, setConversations] = useState(null);
     const { socket, currentUserId } = useContext(socketContext);
-    const [totalUnseenMessages, setTotalUnseenMessages] = useState(0);
-
-    console.log('render conversations');
+    const { setUnseenMessages} = useContext(UnseenMessagesContext);
 
     const onRerenderConversations = useCallback(async () => {
-        console.log('rerender conversations');
         try {
             const conversations = await ConversationService.getConversationByUserId(currentUserId);
             let total = 0;
@@ -45,11 +42,11 @@ const Conversations = () => {
                 conversation.userOrGroup = userOrGroupData;
             }
             setConversations(conversations);
-            setTotalUnseenMessages(total);
+            setUnseenMessages(total);
         } catch (error) {
             console.error(error);
         }
-    }, [currentUserId, setConversations, setTotalUnseenMessages]);
+    }, [currentUserId, setConversations, setUnseenMessages]);
 
     useEffect(() => {
         socket.on('reRenderConversations', onRerenderConversations);
@@ -99,7 +96,6 @@ const Conversations = () => {
                     />
                 )}
             </View>
-            <Footer numberOfMessageUnseen={totalUnseenMessages} />
         </View>
     );
 };

@@ -25,13 +25,5 @@ instance.interceptors.response.use(
     },
 );
 
-axiosRetry(instance, {
-    retries: 2, // number of retries
-    retryDelay: (retryCount) => {
-        return retryCount * 100; // time interval between retries
-    },
-    retryCondition(error) {
-        return error.status === 401;
-    },
-});
+
 export default instance;

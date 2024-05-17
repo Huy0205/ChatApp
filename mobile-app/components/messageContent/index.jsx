@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, Dimensions, TouchableOpacity, Linking } from 'react-native';
 import styles from './styles';
 import { SvgUri } from 'react-native-svg';
@@ -10,6 +10,8 @@ import {
     extractFileSize,
     extractFileExtension,
 } from '../../utils/fileUtil';
+import myColors from '../../constants/colors';
+import LoadingIndicator from '../loadingIndicator';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -17,6 +19,16 @@ const MessageContent = ({ message }) => {
     const [originalWidth, setOriginalWidth] = useState(null);
     const [originalHeight, setOriginalHeight] = useState(null);
 
+    // va
+    if (message.isDeleted) {
+        return (
+            <View style={styles.container}>
+                <Text style={[styles.textMessage, { color: myColors.third }]}>Tin nhắn đã được thu hồi</Text>
+            </View>
+        );
+    }
+
+    // còn kia kiểm tra sao
     switch (message.type) {
         case 'text':
             return (
@@ -80,7 +92,7 @@ const MessageContent = ({ message }) => {
                 </TouchableOpacity>
             );
         default:
-            return null;
+            return <LoadingIndicator />;
     }
 };
 

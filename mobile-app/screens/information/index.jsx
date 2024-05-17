@@ -108,8 +108,12 @@ const Information = ({ route }) => {
         }
     };
 
+    const handleAddFriend = () => {
+
+    };
+
     const handleGoBack = () => {
-        navigation.navigate('AddFriend');
+        navigation.goBack();
     };
 
     return (
@@ -153,7 +157,7 @@ const Information = ({ route }) => {
                             <FontAwesomeIcon icon={faMessage} size={20} color={myColors.main} />
                             <Text style={styles.btnText}>Nhắn tin</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btnAddFriend}>
+                        <TouchableOpacity style={styles.btnAddFriend} onPress={handleAddFriend}>
                             <FontAwesomeIcon icon={faUserPlus} size={20} color={myColors.main} />
                             <Text style={styles.btnText}>Kết bạn</Text>
                         </TouchableOpacity>

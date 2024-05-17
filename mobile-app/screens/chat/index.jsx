@@ -37,6 +37,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const Chat = ({ route }) => {
+    console.log(route.params);
     const navigation = useNavigation();
     const { currentUserId, socket } = useContext(socketContext);
     const { conversation } = useContext(ConversationContext);
@@ -134,10 +135,27 @@ const Chat = ({ route }) => {
             const lastMessage = handleLastMessage(type, content);
 
             await MessageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
-
             new_message.prevSenderId = messages.length > 0 ? messages[0].senderId._id : null;
-            setMessages((prev) => [new_message, ...prev]); // Thêm tin nhắn mới vào đầu mảng
+
+            if (type === 'image' || type === 'file') {
+                // update lại tin nhắn đa
+                setMessages((prev) => {
+                    const updatedMessages = [...prev];
+                    updatedMessages[0] = new_message;
+                    return updatedMessages;
+                });
+            } else {
+                setMessages((prev) => [new_message, ...prev]); // Thêm tin nhắn mới vào đầu mảng
+            }
             socket.emit('sendMessage', { ...data, new_message });
+            socket.emit('reRenderConversations', {
+                members: conversation.recieveInfor.members,
+                conversationId: conversation._id,
+                lastMessage,
+                unseen: 1,
+                sendAt: new Date().toISOString(),
+            }); // render lại Conversations
+
             if (isShowFunctions) setIsShowFunctions(false);
         } catch (error) {
             console.error(error);
@@ -148,6 +166,7 @@ const Chat = ({ route }) => {
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
             if (conversationId === conversation._id) {
+                new_message.prevSenderId = messages.length > 0 ? messages[0].senderId._id : null;
                 setMessages((prev) => [new_message, ...prev]);
             }
         };
@@ -156,7 +175,71 @@ const Chat = ({ route }) => {
         return () => {
             socket.off('getMessage', onMessage);
         };
+    }, [conversation._id, messages]);
+
+    // đăng kí socket nhận emoji tin nhắn
+    useEffect(() => {
+        const onMessageEmoji = ({ conversationId, new_message }) => {
+            if (conversationId === conversation._id) {
+                setMessages((prev) => {
+                    prev.forEach((message) => {
+                        if (message._id === new_message._id) {
+                            message.reaction = new_message.reaction;
+                        }
+                    });
+                    return [...prev];
+                });
+            }
+        };
+
+        socket.on('getMessageEmoji', onMessageEmoji);
+        return () => {
+            socket.off('getMessageEmoji', onMessageEmoji);
+        };
     }, [conversation._id]);
+
+    //đăng kí socket nhận tin nhắn đã xóa
+    useEffect(() => {
+        const onMessageDelete = async ({ conversationId, new_message }) => {
+        
+            if (conversationId === conversation._id) {
+                setMessages((prev) => {
+                    prev.forEach((message) => {
+                        if (message._id === new_message._id) {
+                            message.isDeleted = new_message.isDeleted;
+                        }
+                    });
+                    return [...prev];
+                });
+            }
+        };
+        socket.on('getMessageDelete', onMessageDelete);
+        return () => {
+            socket.off('getMessageDelete', onMessageDelete);
+        };
+    }, [conversation._id]);
+
+    // đăng kí socket nhận tin nhắn đã thu hồi
+    useEffect(() => {
+        const onRecallMessage = async ({ conversationId, new_message }) => {
+       
+            if (conversationId === conversation._id) {
+                setMessages((prev) => {
+                    prev.forEach((message) => {
+                        if (message._id === new_message._id) {
+                            message.isRecall = new_message.isRecall;
+                        }
+                    });
+                    return [...prev];
+                });
+            }
+        };
+
+        socket.on('getRecallMessage', onRecallMessage);
+        return () => {
+            socket.off('getRecallMessage', onRecallMessage);
+        };
+    }, []);
 
     // Xử lý gửi ảnh
     const handleSendImage = async () => {
@@ -167,7 +250,17 @@ const Chat = ({ route }) => {
             });
 
             // Nếu bấm vào nhưng không chọn ảnh
-            if (resultSelectImage.canceled) return;
+            if (resultSelectImage.canceled) {
+                setIsShowFunctions(false);
+                return;
+            }
+
+            const messageTemp = {
+                type: 'loading', // type 'loading' để hiển thị tin nhắn loading 'file đang được gửi...'
+                senderId: currentUserId,
+                prevSenderId: messages.length > 0 ? messages[0].senderId._id : null,
+            };
+            setMessages((prev) => [messageTemp, ...prev]);
 
             // Nếu chọn ảnh
             const img = resultSelectImage.assets[0];
@@ -180,8 +273,11 @@ const Chat = ({ route }) => {
             });
             formData.append('name', img.fileName);
             const response = await MessageService.uploadImageMessageMobile(formData);
+
             await handleSendMessage('image', response.url);
         } catch (error) {
+            setMessages((prev) => prev.filter((item) => item.type !== 'loading'));
+            Alert.alert('Lỗi', 'Không thể gửi ảnh');
             console.error(error);
         }
     };
@@ -196,7 +292,17 @@ const Chat = ({ route }) => {
         try {
             const response = await DocumentPicker.getDocumentAsync({ type: '*/*', copyToCacheDirectory: true });
 
-            if (response.canceled) return;
+            if (response.canceled) {
+                setIsShowFunctions(false);
+                return;
+            }
+
+            const messageTemp = {
+                type: 'loading', // type 'loading' để hiển thị tin nhắn loading 'file đang được gửi...'
+                senderId: currentUserId,
+                prevSenderId: messages.length > 0 ? messages[0].senderId._id : null,
+            };
+            setMessages((prev) => [messageTemp, ...prev]);
 
             let { name, size, uri } = response.assets[0];
             let nameParts = name.split('.');
@@ -212,6 +318,8 @@ const Chat = ({ route }) => {
             const res = await MessageService.uploadFileMessage(formData);
             await handleSendMessage('file', res.fileName);
         } catch (error) {
+            setMessages((prev) => prev.filter((item) => item.type !== 'loading'));
+            Alert.alert('Lỗi', 'Không thể gửi file');
             console.error(error);
         }
     };
@@ -222,13 +330,16 @@ const Chat = ({ route }) => {
                 left={{
                     icon: faArrowLeftLong,
                     onPress: () => {
-                        socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,conversationId:conversation._id}); // render lại Conversations
+                        socket.emit('reRenderConversations', { members: [currentUserId] });
+                        // render lại Conversations
                         navigation.goBack();
                     },
-                    avatarUri: route.params.avatar,
-                    name: route.params.name,
+                    avatarUri: route.params.isGroup
+                        ? route.params.userOrGroup.groupPicture
+                        : route.params.userOrGroup.avatarPicture,
+                    name: route.params.isGroup ? route.params.userOrGroup.groupName : route.params.userOrGroup.username,
                     isGroup: route.params.isGroup,
-                    numberOfMembers: route.params.members.length,
+                    numberOfMembers: route.params.isGroup ? route.params.userOrGroup.members.length : null,
                 }}
             />
             {!isShowFunctions && !isShowKeyboard ? (
@@ -237,7 +348,12 @@ const Chat = ({ route }) => {
                         data={messages}
                         inverted
                         renderItem={({ item }) => {
-                            return <Message message={item} />;
+                            return (
+                                <Message
+                                    message={item}
+                                    group={route.params.isGroup ? route.params.userOrGroup : null}
+                                />
+                            );
                         }}
                         keyExtractor={(item) => item._id}
                         contentContainerStyle={styles.messages}
@@ -255,7 +371,12 @@ const Chat = ({ route }) => {
                             data={messages}
                             inverted
                             renderItem={({ item }) => {
-                                return <Message message={item} />;
+                                return (
+                                    <Message
+                                        message={item}
+                                        group={route.params.isGroup ? route.params.userOrGroup : null}
+                                    />
+                                );
                             }}
                             keyExtractor={(item) => item._id}
                             contentContainerStyle={styles.messages}

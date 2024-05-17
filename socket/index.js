@@ -45,6 +45,11 @@ io.on("connection", (socket) => {
   socket.on(
     "sendMessage",
     ({ senderId, conversationId, new_message, members }) => {
+
+      console.log("members :>> ", members);
+      console.log("senderId :>> ", senderId);
+      console.log("conversationId :>> ", conversationId);
+      console.log("new_message :>> ", new_message);
       members
         .filter((member) => member != senderId)
         .forEach((member) => {

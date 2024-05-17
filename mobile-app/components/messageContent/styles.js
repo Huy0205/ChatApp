@@ -1,6 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { font_14, font_16 } from '../../constants/font';
 import myColors from '../../constants/colors';
+
+const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     container: {
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
     },
     fileName: {
         ...font_16,
-        fontWeight: '600'
+        fontWeight: '600',
     },
     fileInfor: {
         flexDirection: 'row',
