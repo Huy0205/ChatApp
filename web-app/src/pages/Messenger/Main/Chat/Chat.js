@@ -387,7 +387,7 @@ function Chat() {
 
             await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
-ư
+
             socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
             socket.emit('sendMessage', { ...data, new_message }); // gửi socket
             setTextMessage('');
