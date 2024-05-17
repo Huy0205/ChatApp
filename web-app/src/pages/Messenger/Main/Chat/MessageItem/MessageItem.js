@@ -111,6 +111,7 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                                                         own={own}
                                                         content={item.content}
                                                         idMessage={item._id}
+                                                        conversation={conversation}
                                                         data={{
                                                             conversationId: conversation._id,
                                                             members: conversation.recieveInfor.members,
