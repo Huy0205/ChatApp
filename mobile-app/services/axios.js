@@ -3,7 +3,7 @@ import axiosRetry from 'axios-retry';
 axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-    baseURL: 'http://192.168.1.22:8080/api/v1',
+    baseURL: 'http://192.168.1.8:8080/api/v1',
 });
 instance.interceptors.response.use(
     function (response) {
@@ -25,13 +25,5 @@ instance.interceptors.response.use(
     },
 );
 
-axiosRetry(instance, {
-    retries: 2, // number of retries
-    retryDelay: (retryCount) => {
-        return retryCount * 100; // time interval between retries
-    },
-    retryCondition(error) {
-        return error.status === 401;
-    },
-});
+
 export default instance;

@@ -1,8 +1,7 @@
-import { Alert, Pressable, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useLayoutEffect, useState } from 'react';
+import { Alert, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import styles from './styles';
-import { colors } from '../../constants/colors';
-import { headerText } from '../../constants/texts';
+import myColors from '../../constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleLeft, faRightLong } from '@fortawesome/free-solid-svg-icons';
@@ -87,7 +86,7 @@ const SignUp = ({ route }) => {
                     style={[
                         styles.txt,
                         {
-                            borderBottomColor: checkUsername() ? colors.primary : colors.warning,
+                            borderBottomColor: checkUsername() ? myColors.main : myColors.fifth,
                         },
                     ]}
                     onChangeText={(text) => {
@@ -100,10 +99,11 @@ const SignUp = ({ route }) => {
                 <TextInput
                     placeholder="Từ 8 ký tự trở lên"
                     placeholderTextColor={'#645C5C'}
+                    secureTextEntry={true}
                     style={[
                         styles.txt,
                         {
-                            borderBottomColor: checkPassword() ? colors.primary : colors.warning,
+                            borderBottomColor: checkPassword() ? myColors.main : myColors.fifth,
                         },
                     ]}
                     onChangeText={(text) => setPassword(text)}
@@ -114,10 +114,11 @@ const SignUp = ({ route }) => {
                 <TextInput
                     placeholder="Nhập lại mật khẩu"
                     placeholderTextColor={'#645C5C'}
+                    secureTextEntry={true}
                     style={[
                         styles.txt,
                         {
-                            borderBottomColor: checkConfirmPassword() ? colors.primary : colors.warning,
+                            borderBottomColor: checkConfirmPassword() ? myColors.main : myColors.fifth,
                         },
                     ]}
                     onChangeText={(text) => setConfirmPassword(text)}
@@ -126,12 +127,12 @@ const SignUp = ({ route }) => {
                     <View style={styles.rules}>
                         <Text style={styles.bottomText}>Tiếp tục nghĩa là bạn đồng ý với các</Text>
                         <Pressable>
-                            <Text style={[styles.bottomText, { color: colors.primary }]}>điều khoản sử dụng Zalo</Text>
+                            <Text style={[styles.bottomText, { color: myColors.main }]}>điều khoản sử dụng Zalo</Text>
                         </Pressable>
                     </View>
                     <View>
                         <TouchableOpacity style={styles.btnNext} onPress={() => handleContinue()}>
-                            <FontAwesomeIcon icon={faRightLong} color={colors.secondary} size={28} />
+                            <FontAwesomeIcon icon={faRightLong} color={myColors.first} size={28} />
                         </TouchableOpacity>
                     </View>
                 </View>

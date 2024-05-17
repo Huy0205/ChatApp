@@ -1,23 +1,23 @@
 import { StyleSheet } from 'react-native';
-import { contentText } from '../../constants/texts';
-import { colors } from '../../constants/colors';
+import { font_14, font_16 } from '../../constants/font';
+import myColors from '../../constants/colors';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.secondary,
+        backgroundColor: myColors.first,
     },
     lbl: {
         paddingVertical: 10,
         marginTop: 20,
     },
     lblText: {
-        fontSize: 18,
+        ...font_16,
     },
     txt: {
         borderBottomWidth: 1,
         paddingVertical: 8,
-        ...contentText,
+        ...font_16,
     },
     action: {
         flex: 1,
@@ -31,14 +31,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     btnNext: {
-        backgroundColor: colors.primary,
+        backgroundColor: myColors.main,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 30,
         padding: 10,
     },
     bottomText: {
-        ...contentText,
+        ...font_14,
     }
 });
 

@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { contentText } from '../../constants/texts';
-import { colors } from '../../constants/colors';
-import { LinearGradient } from 'react-native-svg';
+import myColors from '../../constants/colors';
+import { font_14, font_16 } from '../../constants/font';
 
 const styles = StyleSheet.create({
     iconBack: {
@@ -11,14 +10,15 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: colors.secondary,
+        backgroundColor: myColors.first,
+        paddingBottom: 10,
     },
     require: {
         padding: 8,
-        backgroundColor: colors.lightGrey,
+        backgroundColor: myColors.second,
     },
     requireContent: {
-        ...contentText,
+        ...font_14,
     },
     input: {
         padding: 15,
@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         borderBottomWidth: 1,
-        borderBottomColor: colors.primary,
+        borderBottomColor: myColors.main,
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     selectCountryText: {
-        ...contentText,
+        ...font_16,
         marginRight: 3,
     },
     iconSelect: {
@@ -46,9 +46,8 @@ const styles = StyleSheet.create({
         flex: 5,
         marginLeft: 15,
         borderBottomWidth: 1,
-        borderBottomColor: colors.warning,
         padding: 5,
-        ...contentText,
+        ...font_16,
     },
     emty: {
         flex: 1,
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     btnNext: {
-        backgroundColor: colors.primary,
+        backgroundColor: myColors.main,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 30,
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
         height: 20,
     },
     bottomText: {
-        ...contentText,
+        ...font_14,
     },
 });
 

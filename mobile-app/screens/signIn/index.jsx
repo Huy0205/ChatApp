@@ -30,7 +30,6 @@ const SignIn = () => {
     };
 
     const handleSignIn = async () => {
-        console.log(phoneNumber, password);
         if (!checkPhoneNumber() || !checkPassword()) {
             Alert.alert('Thông tin không hợp lệ', 'Vui lòng kiểm tra lại thông tin');
             return;
@@ -71,16 +70,7 @@ const SignIn = () => {
                     borderBottomColor: checkPhoneNumber() ? myColors.main : myColors.fifth,
                 }}
             >
-                <View
-                    style={{
-                        width: 70,
-                        borderRightColor: myColors.second,
-                        borderRightWidth: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingVertical: 15,
-                    }}
-                >
+                <View style={styles.selectCountryWrapper}>
                     <Pressable style={{ flexDirection: 'row' }} onPress={() => setVisible(true)}>
                         <Text style={{ marginRight: 3 }}>{selectedCountry.dial_code || '+84'}</Text>
                         <FontAwesomeIcon icon={faAngleDown} color="black" size={18} />
@@ -98,7 +88,7 @@ const SignIn = () => {
                 <TextInput
                     placeholder="Số điện thoại"
                     autoFocus={true}
-                    style={[{ flex: 1, padding: 15, fontSize: 16 }]}
+                    style={styles.txtPhoneNumber}
                     onChangeText={(text) => setPhoneNumber(text)}
                     keyboardType="phone-pad"
                 />
@@ -116,10 +106,11 @@ const SignIn = () => {
                     style={styles.txtPassword}
                     onChangeText={(text) => setPassword(text)}
                 />
-
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <Text style={styles.btnShowPasswordText}>{showPassword ? 'HIỆN' : 'ẨN'}</Text>
-                </TouchableOpacity>
+                <View style={styles.showPassword}>
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <Text style={styles.btnShowPasswordText}>{showPassword ? 'HIỆN' : 'ẨN'}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
             <View style={styles.resetPassword}>
                 <TouchableOpacity>

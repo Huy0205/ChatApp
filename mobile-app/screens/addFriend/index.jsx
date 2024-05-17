@@ -39,7 +39,6 @@ const AddFriend = () => {
         }
         try {
             const response = await UserServices.searchUser(user._id, phoneNumber);
-            console.log(response);
             navigation.navigate('Information', { userRender: response[0] });
         } catch (err) {
             console.err(err);
@@ -50,11 +49,10 @@ const AddFriend = () => {
         console.log(data);
         try {
             const response = await UserServices.getUserById(data);
-            console.log('scan', response);
             navigation.navigate('Information', { userRender: response });
         } catch (err) {
             Alert.alert('Không tìm thấy người dùng', 'Vui lòng kiểm tra lại QR và thử lại!!!');
-            // console.error(err.status);
+            console.error(err.status);
         }
     };
 

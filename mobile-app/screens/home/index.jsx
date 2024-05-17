@@ -12,12 +12,12 @@ const Home = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+            <StatusBar barStyle={'dark-content'} backgroundColor={myColors.first} />
             <View style={styles.title}>
                 <Text style={styles.titleText}>CHAT APP</Text>
             </View>
             <View style={styles.banner}>
-                <Image source={require('../../assets/img/imgHome.png')} style={styles.imgBanner} />
+                <Image source={require('../../assets/banner.jpg')} style={styles.imgBanner} />
             </View>
             <View style={styles.action}>
                 <TouchableOpacity

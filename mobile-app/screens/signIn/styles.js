@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { font_16, font_18 } from '../../constants/font';
+import { font_14, font_16, font_18 } from '../../constants/font';
 import { btn } from '../../constants/button';
 import myColors from '../../constants/colors';
 
@@ -18,18 +18,23 @@ const styles = StyleSheet.create({
         backgroundColor: myColors.second,
     },
     requireContent: {
-        ...font_16,
+        ...font_14,
+    },
+    selectCountryWrapper:{
+        width: 70,
+        borderRightColor: myColors.second,
+        borderRightWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     txtPhoneNumber: {
-        borderBottomWidth: 1,
-        paddingVertical: 20,
-        paddingHorizontal: 15,
+        flex: 1,
+        padding: 15,
         ...font_16,
     },
     inputPassword: {
         flexDirection: 'row',
         borderBottomWidth: 1,
-        alignItems: 'center',
         paddingRight: 15,
     },
     iconPasswordWrapper: {
@@ -38,12 +43,15 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 15,
     },
     txtPassword: {
         flex: 1,
         padding: 15,
         ...font_16,
+    },
+    showPassword: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     btnShowPasswordText: {
         ...font_16,
@@ -74,7 +82,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnQuestionsText: {
-        ...font_16,
+        ...font_14,
     },
 });
 

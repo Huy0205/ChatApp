@@ -273,6 +273,7 @@ function Chat() {
             socket.off('re-renderFriendRequest', onReRenderRequestFriend);
         };
     }, [conversation._id]);
+
     // đăng kí socket nhận emoji tin nhắn
     useEffect(() => {
         socket.emit('reRenderConversations', {members:[currentUserId],conversationId:conversation._id,unseen:0});
@@ -298,7 +299,6 @@ function Chat() {
     //đăng kí socket nhận tin nhắn đã xóa
     useEffect(() => {
         const onMessageDelete = async ({ conversationId, new_message, senderId }) => {
-          
             if (conversationId === conversation._id) {
                 setMessages((prev) => {
                     prev.forEach((message) => {
@@ -318,7 +318,6 @@ function Chat() {
     // đăng kí socket nhận tin nhắn đã thu hồi
     useEffect(() => {
         const onRecallMessage = async ({ conversationId, new_message, senderId }) => {
-        
             if (conversationId === conversation._id) {
                 setMessages((prev) => {
                     prev.forEach((message) => {
@@ -388,7 +387,7 @@ function Chat() {
 
             await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
-            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
+            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage:content,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
             socket.emit('sendMessage', { ...data, new_message }); // gửi socket
             setTextMessage('');
 

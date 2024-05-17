@@ -1,11 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { colors } from '../../constants/colors';
-import { headerText } from '../../constants/texts';
+import { useEffect, useState } from 'react';
+import myColors from '../../constants/colors';
 import styles from './styles';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
 import firebase from 'firebase/compat/app';
 import Header from '../../components/header';
@@ -16,22 +14,40 @@ const ActiveAccount = ({ route }) => {
     const navigation = useNavigation();
 
     const confirmOTP = () => {
-        try {
-            console.log('OTP: ', otp);
-            const credential = firebase.auth.PhoneAuthProvider.credential(route.params.id, otp);
-            firebase
-                .auth()
-                .signInWithCredential(credential)
-                .then(() => {
-                    navigation.navigate('SignUp', route.params.phone);
-                })
-                .catch((error) => {
-                    alert('Invalid OTP');
-                });
-        } catch (error) {
-            alert('Invalid OTP');
+        if (time === 0) {
+            Alert.alert('Mã OTP đã hết hạn, bạn có muốn gửi lại mã?', [
+                {
+                    text: 'Không',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Có',
+                    onPress: () => resendOTP(),
+                },
+            ]);
+        } else {
+            try {
+                const credential = firebase.auth.PhoneAuthProvider.credential(route.params.id, otp);
+                firebase
+                    .auth()
+                    .signInWithCredential(credential)
+                    .then(() => {
+                        navigation.navigate('SignUp', route.params.phone);
+                    })
+                    .catch((error) => {
+                        alert('Invalid OTP');
+                    });
+            } catch (error) {
+                alert('Invalid OTP');
+            }
         }
 
+        // navigation.navigate('SignUp');
+    };
+
+    const resendOTP = () => {
+        route.params.pressResend();
+        setTime(60);
     };
 
     useEffect(() => {
@@ -48,11 +64,6 @@ const ActiveAccount = ({ route }) => {
         return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
     };
 
-    const handleContinue = () => {
-        if (otp.length < 4) return;
-        navigation.navigate('SignUp');
-    };
-
     return (
         <View style={styles.container}>
             <Header
@@ -66,8 +77,8 @@ const ActiveAccount = ({ route }) => {
                 <Text style={styles.requireContent}>Vui lòng không chia sẻ mã xác thực để tránh mất tài khoản</Text>
             </View>
             <View style={styles.content}>
-                <Text style={styles.alert}>Đang gọi đến số (+84) XXX XXX XXX</Text>
-                <Text style={styles.requestListening}>vui lòng bật máy để nghe mã</Text>
+                <Text style={styles.alert}>Đang gửi mã OTP đến (+84) XXX XXX XXX</Text>
+                <Text style={styles.requestListening}>vui lòng xem tin nhắn để nhận mã</Text>
             </View>
             <View style={styles.inputOTP}>
                 <OtpInput
@@ -75,17 +86,11 @@ const ActiveAccount = ({ route }) => {
                     onTextChange={(text) => {
                         setOtp(text);
                     }}
-                    focusColor={colors.primary}
+                    focusColor={myColors.main}
                 />
             </View>
             <View pointerEvents={time === 0 ? 'auto' : 'none'} style={styles.sendTo}>
-                <TouchableOpacity
-                    onPress={() => {
-                        if (time === 0) {
-                            setTime(60);
-                        }
-                    }}
-                >
+                <TouchableOpacity onPress={resendOTP}>
                     <Text style={styles.btnSendToText}>{time === 0 ? 'Gửi lại mã' : ''}</Text>
                 </TouchableOpacity>
                 <Text style={styles.time}>{formatTime(time)}</Text>

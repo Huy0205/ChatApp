@@ -3,15 +3,19 @@ import AuthProvider from './providers/Auth/AuthProvider';
 import SocketProvider from './providers/Socket/SocketProvider';
 import ConversationProvider from './providers/ConversationProvider/ConversationProvider';
 import MainNavigation from './navigations/main';
-// import AddFriend from './screens/addFriend';
-// import Information from './screens/information';
+import UnseenMessagesProvider from './providers/UnseenMessages/UnseenMessages';
+import FriendRequsetProvider from './providers/FriendRequest/FriendRequest';
 
 export default function App() {
     return (
         <AuthProvider>
             <SocketProvider>
                 <ConversationProvider>
-                    <MainNavigation />
+                    <UnseenMessagesProvider>
+                        <FriendRequsetProvider>
+                            <MainNavigation />
+                        </FriendRequsetProvider>
+                    </UnseenMessagesProvider>
                 </ConversationProvider>
             </SocketProvider>
         </AuthProvider>

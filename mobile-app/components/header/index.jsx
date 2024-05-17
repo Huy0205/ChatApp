@@ -4,6 +4,7 @@ import styles from './styles';
 import myColors from '../../constants/colors';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import Avatar from '../avatar';
 
 const colorIcon = myColors.first;
 
@@ -20,6 +21,23 @@ const Header = ({ left, right }) => {
                     <View style={styles.txtSearchWrapper}>
                         <FontAwesomeIcon icon={faSearch} color={myColors.fourth} size={16} style={{ padding: 8 }} />
                         <TextInput style={styles.txtSearch} placeholder="Tìm kiếm" autoFocus={true} />
+                    </View>
+                )}
+                {left.avatarUri && (
+                    <View style={styles.avatarContainer}>
+                        <View style={styles.avatarWrapper}>
+                            <Avatar uri={left.avatarUri} size={45} onPress={left.pressAvatar} />
+                        </View>
+                        <View style={styles.infoWrapper}>
+                            <Text style={styles.name}>{left.name}</Text>
+                            <Text style={styles.infoOther}>
+                                {left.isGroup
+                                    ? left.numberOfMembers + ' thành viên'
+                                    : left.isFiend
+                                    ? 'Bạn bè'
+                                    : 'Người lạ'}
+                            </Text>
+                        </View>
                     </View>
                 )}
             </View>

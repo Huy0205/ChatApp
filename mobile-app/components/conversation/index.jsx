@@ -15,8 +15,6 @@ const Conversation = ({ userOrGroup, _id, lastMessage, isGroup, numberOfUnseenMe
     const { setCurrentConversation } = useContext(ConversationContext);
     const [previousTime, setPreviousTime] = useState(Date.now() - new Date(updatedAt));
 
-    console.log('render conversation');
-
     useEffect(() => {
         const interval = setInterval(() => {
             setPreviousTime(Date.now() - new Date(updatedAt));
@@ -30,8 +28,8 @@ const Conversation = ({ userOrGroup, _id, lastMessage, isGroup, numberOfUnseenMe
         const name = userOrGroup.username || userOrGroup.groupName;
         const idOther = userOrGroup._id;
         const members = userOrGroup.members
-            ? userOrGroup.members.map((item) => item._id)
-            : [currentUserId, userOrGroup._id];
+            ? userOrGroup.members.map((item) => item._id) 
+            : [currentUserId, userOrGroup._id]; 
 
         // Update conversation mới được chọn vào context
         setCurrentConversation(avatar, name, idOther, isGroup, members, _id);
@@ -39,7 +37,7 @@ const Conversation = ({ userOrGroup, _id, lastMessage, isGroup, numberOfUnseenMe
         // thêm user_id vào isSeen của các tin nhắn chưa xem
         await MessageService.updateSeenMessages(_id, currentUserId);
 
-        navigation.navigate('Chat');
+        navigation.navigate('Chat', {userOrGroup, isGroup});
     };
 
     const formatTime = (miliseconds) => {
