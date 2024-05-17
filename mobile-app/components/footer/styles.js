@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         width: windowWidth,
         height: (8 * windowHeight) / 100,
         backgroundColor: myColors.first,
-        shadowColor: myColors.second,
+        shadowColor: myColors.third,
         shadowOffset: {
             width: 0,
             height: -1,

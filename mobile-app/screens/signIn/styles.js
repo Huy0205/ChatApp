@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { font_16, font_18 } from '../../constants/font';
+import { font_14, font_16, font_18 } from '../../constants/font';
 import { btn } from '../../constants/button';
 import myColors from '../../constants/colors';
 
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         backgroundColor: myColors.second,
     },
     requireContent: {
-        ...font_16,
+        ...font_14,
     },
     txtPhoneNumber: {
         borderBottomWidth: 1,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnQuestionsText: {
-        ...font_16,
+        ...font_14,
     },
 });
 

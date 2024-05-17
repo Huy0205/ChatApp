@@ -39,7 +39,7 @@ const Conversation = ({ userOrGroup, _id, lastMessage, isGroup, numberOfUnseenMe
         // thêm user_id vào isSeen của các tin nhắn chưa xem
         await MessageService.updateSeenMessages(_id, currentUserId);
 
-        navigation.navigate('Chat');
+        navigation.navigate('Chat', {avatar, name, members, isGroup});
     };
 
     const formatTime = (miliseconds) => {

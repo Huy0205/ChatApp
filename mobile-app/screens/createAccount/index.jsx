@@ -1,7 +1,7 @@
 import { Alert, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
 import styles from './styles';
-import { colors } from '../../constants/colors';
+import myColors from '../../constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleDown, faAngleLeft, faRightLong } from '@fortawesome/free-solid-svg-icons';
@@ -19,12 +19,13 @@ const CreateAccount = () => {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const RecaptchaVerifier = useRef(null);
+
     const sendOTP = () => {
         try {
             if (phone.length === 9) {
                 const phoneProvider = new firebase.auth.PhoneAuthProvider();
                 phoneProvider.verifyPhoneNumber(`+84${phone}`, RecaptchaVerifier.current).then((verificationId) => {
-                    navigation.navigate('ActiveAccount', { id: verificationId, phone: phone });
+                    navigation.navigate('ActiveAccount', { id: verificationId, phone: phone, pressResend: sendOTP});
                 });
             } else {
                 alert('Số điện thoại không hợp lệ');
@@ -33,14 +34,8 @@ const CreateAccount = () => {
             alert('Failed to send OTP');
             console.log(error);
         }
-    };
 
-    const handleCreateAccount = () => {
-        if (phone.length !== 9 && phone.length !== 10) {
-            Alert.alert('Thông báo', 'Số điện thoại không hợp lệ');
-            return;
-        }
-        navigation.navigate('ActiveAccount');
+        // navigation.navigate('ActiveAccount');
     };
 
     return (
@@ -81,7 +76,7 @@ const CreateAccount = () => {
                     keyboardType="phone-pad"
                     placeholder="Số điện thoại"
                     autoFocus={true}
-                    style={[styles.txtPhone, { borderBottomColor: txtActive ? colors.primary : colors.warning }]}
+                    style={[styles.txtPhone, { borderBottomColor: txtActive ? myColors.main : myColors.fifth }]}
                 />
             </View>
             <View style={styles.emty}></View>
@@ -89,14 +84,14 @@ const CreateAccount = () => {
                 <View style={styles.rules}>
                     <Text style={styles.bottomText}>Tiếp tục nghĩa là bạn đồng ý với các</Text>
                     <Pressable>
-                        <Text style={[styles.bottomText, { color: colors.primary }]}>
+                        <Text style={[styles.bottomText, { color: myColors.main }]}>
                             điều khoản sử dụng của chúng tôi
                         </Text>
                     </Pressable>
                 </View>
                 <View>
                     <TouchableOpacity style={styles.btnNext} onPress={sendOTP}>
-                        <FontAwesomeIcon icon={faRightLong} color={colors.secondary} size={28} />
+                        <FontAwesomeIcon icon={faRightLong} color={myColors.first} size={28} />
                     </TouchableOpacity>
                 </View>
             </View>

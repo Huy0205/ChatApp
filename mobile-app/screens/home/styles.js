@@ -7,12 +7,11 @@ const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 40,
         backgroundColor: myColors.first,
     },
     title: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     titleText: {
@@ -25,8 +24,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imgBanner: {
-        width: windowWidth - 60,
-        height: windowWidth - 60,
+        width: windowWidth,
+        height: windowWidth,
         resizeMode: 'contain',
     },
     action: {

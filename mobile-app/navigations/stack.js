@@ -7,6 +7,9 @@ import Chat from '../screens/chat';
 import AddFriend from '../screens/addFriend';
 import ScanQR from '../screens/scanQR';
 import Information from '../screens/information';
+import CreateAccount from '../screens/createAccount';
+import ActiveAccount from '../screens/activeAccount';
+import SignUp from '../screens/signUp';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,13 +23,9 @@ const StackNavigation = () => {
             <Stack.Screen name="AddFriend" component={AddFriend} />
             <Stack.Screen name="ScanQR" component={ScanQR} />
             <Stack.Screen name="Information" component={Information} />
-
-            {/* <Stack.Screen name="CreateAccount" component={CreateAccount} />
+            <Stack.Screen name="CreateAccount" component={CreateAccount} />
             <Stack.Screen name="ActiveAccount" component={ActiveAccount} />
-                        <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="Message" component={MessageBottom} />
-            <Stack.Screen name="Search" component={Search} />
-            <Stack.Screen name="Chat" component={Chat} /> */}
+            <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Navigator>
     );
 };

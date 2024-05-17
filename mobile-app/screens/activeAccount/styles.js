@@ -1,19 +1,19 @@
 import { StyleSheet } from 'react-native';
-import { contentText } from '../../constants/texts';
-import { colors } from '../../constants/colors';
-import { btn, btnText } from '../../constants/button';
+import myColors from '../../constants/colors';
+import { font_14, font_16 } from '../../constants/font';
+import { btn } from '../../constants/button';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.secondary,
+        backgroundColor: myColors.first,
     },
     require: {
         padding: 8,
-        backgroundColor: colors.lightGrey,
+        backgroundColor: myColors.second,
     },
     requireContent: {
-        ...contentText,
+        ...font_14,
     },
     content: {
         flex: 3,
@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     alert: {
-        ...contentText,
+        ...font_14,
     },
     requestListening: {
-        ...contentText,
+        ...font_14,
         color: '#645C5C',
     },
     inputOTP: {
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginRight: 10,
         paddingVertical: 5,
-        ...contentText,
+        ...font_16,
     },
     sendTo: {
         flex: 1,
@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     btnSendToText: {
-        ...contentText,
+        ...font_16,
         marginRight: 20,
     },
     time: {
-        ...contentText,
-        color: colors.warning,
+        ...font_16,
+        color: myColors.fifth,
     },
     action: {
         flex: 7,
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
     },
     btnContinue: {
         ...btn,
-        backgroundColor: colors.primary,
+        backgroundColor: myColors.main,
     },
     btnContinueText: {
-        ...btnText,
-        color: colors.secondary,
+        ...font_16,
+        color: myColors.first,
     },
 });
 
