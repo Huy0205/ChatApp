@@ -26,7 +26,7 @@ function ModalCreateGroup({ onHide, user, group }) {
     const { socket, currentUserId } = useContext(socketContext);
     const currentUser = useInfor();
     const { conversation, setCurrentConversation, setMembers, getMembers } = useContext(ConversationContext);
-    const [showModalSetImageGroup, setShowModalSetImageGroup] = useState(true);
+    const [showModalSetImageGroup, setShowModalSetImageGroup] = useState(false);
     const [imgGroup, setImgGroup] = useState('');
     const [fileImage, setFileImage] = useState(null);
     const fetchUsers = async () => {
@@ -77,7 +77,7 @@ function ModalCreateGroup({ onHide, user, group }) {
         try {
             let members;
             let userIds = selectUser.map((m) => m._id);
-
+            console.log("group",group);
             if (group) {
                 try {
                     members = [...userIds];
@@ -107,6 +107,7 @@ function ModalCreateGroup({ onHide, user, group }) {
                         'https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png',
                 );
                 var new_conversation = await conversationServices.createConversation(group._id, members, 1);
+                console.log("new_conversation",new_conversation);
                 setCurrentConversation(
                     group.groupPicture,
                     group.groupName,
@@ -120,7 +121,7 @@ function ModalCreateGroup({ onHide, user, group }) {
             socket.emit('reRenderConversations', {
                 members: members,
                 unseen: 1,
-                conversationId: new_conversation._id ||conversation._id,
+                conversationId: new_conversation?._id ||conversation._id,
                 sendAt: new Date().toISOString(),
             });
         } catch (error) {

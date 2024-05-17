@@ -3,7 +3,7 @@ import axiosRetry from 'axios-retry';
 axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-    baseURL: 'http://192.168.1.8:8080/api/v1',
+    baseURL: 'http://192.168.239.64:8080/api/v1',
 });
 instance.interceptors.response.use(
     function (response) {
