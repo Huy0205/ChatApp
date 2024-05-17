@@ -10,6 +10,7 @@ import CreateAccount from '../screens/createAccount';
 import ActiveAccount from '../screens/activeAccount';
 import SignUp from '../screens/signUp';
 import BottomNavigation from './bottom';
+import CreateGroup from '../screens/createGroup';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const StackNavigation = () => {
             <Stack.Screen name="CreateAccount" component={CreateAccount} />
             <Stack.Screen name="ActiveAccount" component={ActiveAccount} />
             <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="CreateGroup" component={CreateGroup} />
         </Stack.Navigator>
     );
 };

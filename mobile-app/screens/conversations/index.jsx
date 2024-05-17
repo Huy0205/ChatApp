@@ -73,6 +73,7 @@ const Conversations = () => {
                     },
                     {
                         icon: faUsersViewfinder,
+                        onPress: () => navigation.navigate('CreateGroup'),
                     },
                 ]}
             />
