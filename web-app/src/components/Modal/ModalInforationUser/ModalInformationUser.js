@@ -9,7 +9,8 @@ import EditUser from './EditUser';
 import Loading from '../../Loading/Loading';
 const ModalInformationUser = () => {
     const [editing, setEditing] = useState(false);
-    const { _id, avatarPicture, backgroundPicture, username, gender, phonenumber } = useInfor();
+    const { _id, avatarPicture, backgroundPicture, username, gender, phonenumber ,birth} = useInfor();
+    console.log('useInfor', useInfor());
     const { updateUser } = useContext(AuthContext);
     const fileRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -173,13 +174,13 @@ const ModalInformationUser = () => {
                                 >
                                     Thông tin cá nhân
                                 </h3>
-                                <p className="p_infor">
+                                <p className="p_infor mb-3">
                                     <strong className="me-3">Giới tính:</strong> <span>{gender ? 'nữ' : 'nam'}</span>
                                 </p>
-                                <p className="p_infor">
+                                <p className="p_infor mb-3">
                                     <strong className="me-3">Ngày sinh:</strong> <span>12-2-2024</span>
                                 </p>
-                                <p className="p_infor">
+                                <p className="p_infor mb-3">
                                     <strong className="me-3">Số điện thoại:</strong> <span> {phonenumber}</span>
                                 </p>
                             </div>
