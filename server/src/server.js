@@ -22,6 +22,7 @@ const corsOptions = {
     "exp://192.168.1.22:8081",
     "exp://192.168.1.8:8081",
     "exp://192.168.239.64:8081",
+    "exp://192.168.78.133:8081"
   ], //access-control-allow-origin
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,

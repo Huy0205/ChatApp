@@ -58,7 +58,7 @@ const Conversation = () => {
     const handleRerenderConversation = async (conversationId, unseen, lastmessage, sendAt) => {
         let i = 0;
         let flag = false;
-        console.log("conversations", conversations);
+        console.log("conversations co chay vo day ne >>>>>", conversations);
         conversations.forEach((con, index) => {
 
             if (con._id === conversationId) {
