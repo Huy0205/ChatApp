@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useLang } from '../../../hooks';
 import { toast } from 'react-hot-toast';
 import * as authServices from '../../../services/authService';
-export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister }) {
+export default function FormRegister({ onSuccess, setIsAuthPhone, onPhoneRegister }) {
     const { t } = useLang();
 
     const [phone, setPhone] = useState('');
@@ -20,7 +20,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
     const [pendingAnimation, setPendingAnimation] = useState(false);
     const auth = configs.firebase.auth;
 
-    console.log(phone)
+    console.log(phone);
     const [dataForm, setDataForm] = useState({
         username: '',
         password: '',
@@ -28,12 +28,6 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
     });
 
     const handleRegister = async () => {
-        if (dataForm.password !== dataForm.confirmPassword) {
-            toast("Password and confirm password don't match", {
-                type: 'error',
-            });
-            return;
-        }
         try {
             const res = await authServices.register({
                 username: dataForm.username,
@@ -56,7 +50,6 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
         });
     };
 
-     
     const handleOpenModal = (isOpen) => {
         setIsOpenModalOTP(isOpen);
     };
@@ -73,12 +66,16 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
         }
     }
 
-
-    
     async function onSignup() {
         try {
             if (!checkValidPhoneNumber(`${phone}`, 'VN')) {
                 toast.error('Số điện thoại không đúng định dạng hoặc không hợp lệ!!!');
+                return;
+            }
+            if (dataForm.password !== dataForm.confirmPassword) {
+                toast("Password and confirm password don't match", {
+                    type: 'error',
+                });
                 return;
             }
             const res = await authServices.checkExitPhone(`+${phone}`); // `+${phone}
@@ -89,7 +86,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
             onCaptchVerify();
             setPendingAnimation(true);
             setLoading(true);
-        
+
             const appVerifier = window.recaptchaVerifier;
             signInWithPhoneNumber(auth, `+${phone}`, appVerifier)
                 .then((confirmationResult) => {
@@ -102,7 +99,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
                 .catch((error) => {
                     console.log(error);
                     setPendingAnimation(false);
-                    toast.error("OTP can't send, please try again!");
+             
                     setLoading(false);
                 });
         } catch (error) {
@@ -112,11 +109,11 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
     //hàm xác thực otp
     function onOTPVerify(otp) {
         setLoading(true);
-        setPendingAnimation(true)
+        setPendingAnimation(true);
         window.confirmationResult
             .confirm(otp)
             .then((res) => {
-                setPendingAnimation(false)
+                setPendingAnimation(false);
                 toast.success('xác minh thành công !!!');
                 setLoading(false);
                 handleRegister();
@@ -126,7 +123,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
                 console.log(err);
                 toast.error('OTP không chính xác,hoặc hết hạn !!!');
                 setLoading(false);
-                setPendingAnimation(false)
+                setPendingAnimation(false);
             });
     }
     return (
@@ -170,7 +167,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
                     placeholder={t('Register.placeholder_username')}
                 />
             </div>
-      
+
             <div className="input-group flex-nowrap mt-2" style={{ paddingRight: '10px' }}>
                 <span
                     style={{
@@ -216,20 +213,22 @@ export default function FormRegister({ onSuccess,setIsAuthPhone,onPhoneRegister 
                 />
             </div>
             <button
-       
-                    disabled={dataForm.username.length < 3 || dataForm.password.length < 0 || dataForm.confirmPassword.length < 0 || phone.length < 3}
-                    type="button"
-                    onClick={() => {
-                        onSignup();
-                    }}
-                    className={clsx(
-                        'btn btn-primary w-100 mt-3 d-flex justify-content-center align-items-center',
-                        phone.length < 3 ? 'disabled' : '',
-                    )}
-                >
-                    <span  style={{color:"white !important"}} > {t('Login.button.send_otp')}</span>
-                    {loading && <span className="loader"></span>}
-                </button>
+                disabled={
+                    dataForm.username.length < 3 ||
+                    dataForm.password.length < 0 ||
+                    dataForm.confirmPassword.length < 0 ||
+                    phone.length < 3
+                }
+                type="button"
+                onClick={onSignup}
+                className={clsx(
+                    'btn btn-primary w-100 mt-3 d-flex justify-content-center align-items-center',
+                    phone.length < 3 ? 'disabled' : '',
+                )}
+            >
+                <span style={{ color: 'white !important' }}> {t('Login.button.send_otp')}</span>
+                {loading && <span className="loader"></span>}
+            </button>
         </div>
     );
 }
