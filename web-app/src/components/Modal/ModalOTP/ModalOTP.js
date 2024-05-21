@@ -8,7 +8,7 @@ export default function ModalOTP({ onClose, onConfirm, onResendOTP, phoneNumber,
     const [otp, setOtp] = useState('');
     const { t } = useLang();
 
-    const [seconds, setSeconds] = useState(10);
+    const [seconds, setSeconds] = useState(60);
 
     useEffect(() => {
         const intervalId = setInterval(() => {

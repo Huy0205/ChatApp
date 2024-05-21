@@ -59,13 +59,13 @@ export default function Search() {
             ) : (
                 <>
                     <button className="user_plus action_btn">
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i className="fa-solid fa-user-plus"></i>
                     </button>
                     <button
                         onClick={() => setShowModal(true)}
                         className="group_plus action_btn" type='button' >
 
-                        <i class="fa-solid fa-users"></i>
+                        <i className="fa-solid fa-users"></i>
                     </button>
                 </>
             )}

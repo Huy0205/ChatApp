@@ -37,14 +37,14 @@ export default function ActionMessagePopper({ content, idMessage, data, own,conv
     const menus = [
         {
             title: 'copy tin nhắn',
-            Icon: <i class="fa-regular fa-clipboard"></i>,
+            Icon: <i className="fa-regular fa-clipboard"></i>,
             callback: async () => {
                 navigator.clipboard.writeText(content);
             },
         },
-        { title: 'xem chi tiết', Icon: <i class="fa-solid fa-circle-info"></i>, callback: () => {} },
-        { title: 'thu hồi tin nhắn', Icon: <i class="fa-solid fa-recycle"></i>, callback: handledeleteMessage },
-        { title: 'xóa chỉ ở phía tôi', Icon: <i class="fa-solid fa-trash"></i>, callback: handleDeleteMySeftMessage },
+        { title: 'xem chi tiết', Icon: <i className="fa-solid fa-circle-info"></i>, callback: () => {} },
+        { title: 'thu hồi tin nhắn', Icon: <i className="fa-solid fa-recycle"></i>, callback: handledeleteMessage },
+        { title: 'xóa chỉ ở phía tôi', Icon: <i className="fa-solid fa-trash"></i>, callback: handleDeleteMySeftMessage },
     ];
 
     return (

@@ -19,6 +19,7 @@ const Conversation = () => {
     const { conversation } = useContext(ConversationContext);
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
+    const conversationRef = useRef(conversation);
     const [activeFilter, setActiveFilter] = useState(1);
     const [activeConversation, setActiveConversation] = useState(conversation._id);
     const { t } = useLang();
@@ -31,14 +32,16 @@ const Conversation = () => {
                 const conversationID = conversations[i]._id;
                 conversations[i].timeDuaration = timeDuaration(conversations[i].updatedAt);
                 //get toàn bộ message của conversation tương ứng
-
                 const totalUnseen = await messageService.countUnseenMessage(conversationID, currentUserId);
-
                 //thêm trường totalUnseen vào mảng object conversation
                 conversations[i].totalUnseen = typeof totalUnseen === 'number' ? totalUnseen : totalUnseen.data;
-                console.log('totalUnseen>>', conversations[i].totalUnseen);
+
+                const members = conversations[i].members.filter((u) => u !== currentUserId);
+                conversations[i].isOnline = !conversations[i].isGroup
+                    ? conversation.onlineUsers.some((u) => u.userId === members[0])
+                    : false;
             }
-            console.log('conversations in fet', conversations);
+
             setConversations([...conversations]);
         } catch (err) {
             console.log(err);
@@ -58,19 +61,16 @@ const Conversation = () => {
     const handleRerenderConversation = async (conversationId, unseen, lastmessage, sendAt) => {
         let i = 0;
         let flag = false;
-        console.log("conversations co chay vo day ne >>>>>", conversations);
+        console.log('conversations co chay vo day ne >>>>>', conversations);
         conversations.forEach((con, index) => {
-
             if (con._id === conversationId) {
                 i = index;
                 flag = true;
                 const totalunseen = con.totalUnseen;
-               
-                console.log("currentConversation", conversation._id);
+
+                console.log('currentConversation', conversation._id);
                 if (conversation._id == conversationId) {
                     con.totalUnseen = 0;
-             
-                    
                 } else {
                     con.totalUnseen = unseen + totalunseen;
                 }
@@ -112,21 +112,50 @@ const Conversation = () => {
             handleRerenderConversation(conversationId, unseen, lastMessage, sendAt);
             setActiveConversation(conversation._id);
         };
-        socket.on('reRenderConversations', onRerenderConversations);
 
+        socket.on('reRenderConversations', onRerenderConversations);
         return () => {
             socket.off('reRenderConversations', onRerenderConversations);
         };
     }, [conversations, conversation._id]);
 
     useEffect(() => {
-        if (activeFilter) {
-            fetchConversations();
+        if (activeFilter && conversations.length > 0) {
+            setConversations([...conversationRef.current]);
         } else {
             const filterConversations = conversations.filter((item) => item.totalUnseen > 0);
+            console.log('filterConversations', filterConversations);
+            conversationRef.current = conversations;
             setConversations([...filterConversations]);
         }
     }, [activeFilter]);
+
+    useEffect(() => {
+        if (conversation.onlineUsers.length > 0) {
+            let flag = false;
+            for (let i = 0; i < conversations.length; i++) {
+                const members = conversations[i].members.filter((u) => u !== currentUserId);
+                if (conversations[i].isGroup) continue;
+                const checkOnline = conversation.onlineUsers.some((u) => u.userId === members[0]);
+                if (checkOnline) {
+                    flag = true;
+                    conversations[i].isOnline = true;
+                }
+                if (conversations[i]?.isOnline && !checkOnline) {
+                    flag = true;
+                    conversations[i].isOnline = false;
+                }
+            }
+            if (flag) {
+                setConversations([...conversations]);
+            }
+        }
+    }, [conversation.onlineUsers]);
+
+    useEffect(() => {
+        fetchConversations();
+    }, []);
+
     return (
         <div
             id="wp_conversation"

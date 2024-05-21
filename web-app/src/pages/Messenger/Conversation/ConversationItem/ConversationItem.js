@@ -1,4 +1,3 @@
-
 import './ConversationItem.scss';
 import DetailConversationPopper from '../../../../components/Popper/DetailConversationPopper/DetailConversationPopper';
 import { useEffect, useState, useContext } from 'react';
@@ -8,6 +7,7 @@ import * as userService from '../../../../services/userService';
 import * as groupService from '../../../../services/groupService';
 import clsx from 'clsx';
 import { ViewPortContext } from '../../../../providers/ViewPort/ViewPortProvider';
+import OnlineIcon from '../../../../components/OnlineIcon/OnlineIcon';
 function ConversationItem({
     activeConversation,
     conversationId,
@@ -21,6 +21,7 @@ function ConversationItem({
     timeDuaration,
     onActiveConversation,
     lastSenderid,
+    isOnline
 }) {
     const { t } = useLang();
     const [openDetail, setOpenDetail] = useState(false);
@@ -39,7 +40,7 @@ function ConversationItem({
     }, [openPopper]);
 
     useEffect(() => {
-        console.log('members', members);
+ 
         const fetchMember = async () => {
             try {
                 if (isGroup) {
@@ -50,7 +51,7 @@ function ConversationItem({
                 }
                 const recieverid = members.find((id) => id !== currentUserId);
                 const user = await userService.getUserById(recieverid);
-              
+
                 setUserOrGroup(user);
             } catch (err) {
                 console.log(err);
@@ -62,20 +63,14 @@ function ConversationItem({
     return (
         <div
             onClick={() => {
-
                 const avatar = userOrGroup.avatarPicture || userOrGroup.groupPicture;
                 const name = userOrGroup.username || userOrGroup.groupName;
                 const _id = userOrGroup._id;
-                const members = userOrGroup.members ? userOrGroup.members.map(item => item._id) : [currentUserId, userOrGroup._id];
+                const members = userOrGroup.members
+                    ? userOrGroup.members.map((item) => item._id)
+                    : [currentUserId, userOrGroup._id];
 
-                setCurrentConversation(
-                    avatar,
-                    name,
-                    _id,
-                    isGroup,
-                    members,
-                    conversationId,
-                );
+                setCurrentConversation(avatar, name, _id, isGroup, members, conversationId);
                 isViewChat();
                 onActiveConversation(conversationId);
             }}
@@ -85,19 +80,26 @@ function ConversationItem({
             }
         >
             {openDetail && <DetailConversationPopper />}
-            <div className="avatar">
+            <div className="avatar  position-relative">
                 <img
                     className="single_chat_avatar"
                     src={userOrGroup ? userOrGroup.avatarPicture || userOrGroup.groupPicture : ''}
                     alt="avt"
                 />
+                <button className="onlineStatus">
+                  {
+                    isOnline && <OnlineIcon/>
+                  } 
+                </button>
             </div>
             <div className="infor">
-                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{userOrGroup ? userOrGroup.username || userOrGroup.groupName : ''}</span>
+                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>
+                    {userOrGroup ? userOrGroup.username || userOrGroup.groupName : ''}
+                </span>
                 <br />
                 <p className={clsx('last_message', totalUnseen > 0 ? 'fw-bold' : '')}>
                     {lastSenderid === currentUserId ? `Bạn: ${lastMessage}` : lastMessage}
-                    { }
+                    {}
                 </p>
             </div>
             <span className="timer_message">{`${timeDuaration}`}</span>

@@ -7,6 +7,10 @@
 
     .active {
         background-color: var(--bg-active);
+
+        >span{
+            color: white !important;
+        }
     }
 
     .wp_avt {

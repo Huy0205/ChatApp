@@ -1,24 +1,23 @@
-import EmojiPicker from 'emoji-picker-react';
 import './Chat.scss';
-import MessageItem from './MessageItem/MessageItem';
-import Notify from './Notify/Notify';
 import * as messageService from '..//..//..//..//services//messageService';
 import * as userService from '..//..//..//..//services//userService';
 import * as friendService from '..//..//..//..//services//requestFriendService';
-import { toast, Toaster } from 'react-hot-toast';
-import { ToastContainer, toast as toastify } from 'react-toastify';
+import {  toast as toastify } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useLang } from '../../../../hooks';
 import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
 import { socketContext } from '../../../../providers/Socket/SocketProvider';
 import { v4 as uuidv4 } from 'uuid';
 import { formatDateString, chuyenDoiThoiGian } from '../../../../utils/chatUtil';
-import axios from 'axios';
-import ModalCreateGroup from '../../../../components/Modal/ModalCreateGroup/ModalCreateGroup';
-import ModalMemberGroup from '../../../../components/Modal/ModalMembersGroup/ModalMemberGroup';
-import useViewport from '../../../../hooks/useViewPort';
 import { ViewPortContext } from '../../../../providers/ViewPort/ViewPortProvider';
+import Notify from './Notify/Notify';
+import ModalCreateGroup from '../../../../components/Modal/ModalCreateGroup/ModalCreateGroup';
 import clsx from 'clsx';
+import ModalMemberGroup from '../../../../components/Modal/ModalMembersGroup/ModalMemberGroup';
+import EmojiPicker from 'emoji-picker-react';
+import OnlineIcon from '../../../../components/OnlineIcon/OnlineIcon';
+import MessageItem from './MessageItem/MessageItem';
 function Chat() {
     const { view, isViewConversation } = useContext(ViewPortContext);
 
@@ -46,7 +45,7 @@ function Chat() {
     const refInput = useRef();
     const fileImageRef = useRef();
     const fileRef = useRef();
-
+    console.log('conversation >>>', conversation);
     const onUploadImageFile = () => {
         fileImageRef.current.click();
     };
@@ -123,10 +122,9 @@ function Chat() {
             console.log(error);
         }
     };
-    
+
     const handleDataMessages = async (messages) => {
         try {
-          
             let ReceivedMessage = [];
             let sendMessage = [];
             const components = [];
@@ -203,11 +201,10 @@ function Chat() {
                               />,
                           ));
             }
-            
+
             // update status seen message
             senderId && (await messageService.updateSeenMessages(conversation._id, currentUserId));
             setMessagesComponent([...components]);
-    
         } catch (error) {
             console.log(error);
         }
@@ -216,7 +213,7 @@ function Chat() {
     const fetchMessage = async () => {
         if (conversation._id) {
             try {
-                console.log("call api with",conversation._id);
+                console.log('call api with', conversation._id);
                 const messages = await messageService.getMessageByConversationId(conversation._id);
                 setMessages(messages);
             } catch (error) {
@@ -276,7 +273,7 @@ function Chat() {
 
     // đăng kí socket nhận emoji tin nhắn
     useEffect(() => {
-        socket.emit('reRenderConversations', {members:[currentUserId],conversationId:conversation._id,unseen:0});
+        socket.emit('reRenderConversations', { members: [currentUserId], conversationId: conversation._id, unseen: 0 });
         const onMessageEmoji = ({ conversationId, new_message }) => {
             if (conversationId === conversation._id) {
                 setMessages((prev) => {
@@ -328,7 +325,6 @@ function Chat() {
                     return [...prev];
                 });
             }
-          
         };
 
         socket.on('getRecallMessage', onRecallMessage);
@@ -388,7 +384,13 @@ function Chat() {
             await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
 
-            socket.emit('reRenderConversations', {members:conversation.recieveInfor.members,lastMessage,unseen:1,conversationId:conversation._id,sendAt:new Date().toISOString()});
+            socket.emit('reRenderConversations', {
+                members: conversation.recieveInfor.members,
+                lastMessage,
+                unseen: 1,
+                conversationId: conversation._id,
+                sendAt: new Date().toISOString(),
+            });
             socket.emit('sendMessage', { ...data, new_message }); // gửi socket
             setTextMessage('');
 
@@ -450,7 +452,7 @@ function Chat() {
                             }}
                             onClick={isViewConversation}
                         >
-                            <i class="fa-solid fa-arrow-left"></i>
+                            <i className="fa-solid fa-arrow-left"></i>
                         </button>
                     )}
                     <div className="avatar">
@@ -461,7 +463,7 @@ function Chat() {
                             <span>{conversation.recieveInfor.name}</span>
                         </div>
 
-                        <div className="status">
+                        <div className="status position-relative">
                             {conversation.recieveInfor.isGroup ? (
                                 <p
                                     onClick={() => {
@@ -469,12 +471,15 @@ function Chat() {
                                     }}
                                     className="d-flex align-items-center gap-1"
                                 >
-                                    <i class="fa-regular fa-user"></i>
+                                    <i className="fa-regular fa-user"></i>
                                     <span>{`${conversation.recieveInfor.members.length} thành viên`}</span>
                                 </p>
                             ) : (
                                 <span>{t('messenger.account_chat_item.status.online')}</span>
                             )}
+                            <button className="onlineStatus">{conversation.onlineUsers.some(
+                                u=>u.userId === conversation.recieveInfor._id
+                            ) && <OnlineIcon />}</button>
                         </div>
                     </div>
                 </div>
@@ -492,10 +497,10 @@ function Chat() {
                         ></i>
                     </button>
                     <button className=" action_btn">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
                     <button className=" action_btn">
-                        <i class="fa-solid fa-video"></i>
+                        <i className="fa-solid fa-video"></i>
                     </button>
                     <button className=" action_btn">
                         <img
@@ -529,7 +534,7 @@ function Chat() {
                         onChange={handleFileImageChange}
                     />
                     <button className="action_btn">
-                        <i class="fa-regular fa-note-sticky"></i>
+                        <i className="fa-regular fa-note-sticky"></i>
                     </button>{' '}
                     <button onClick={onUploadFile} className="action_btn">
                         <input
@@ -540,10 +545,10 @@ function Chat() {
                             onChange={handleFileChange}
                         />
 
-                        <i class="fa-solid fa-paperclip"></i>
+                        <i className="fa-solid fa-paperclip"></i>
                     </button>
                     <button onClick={onUploadImageFile} className="action_btn">
-                        <i class="fa-regular fa-image"></i>
+                        <i className="fa-regular fa-image"></i>
                     </button>
                 </div>
                 <div className="chat_input position-relative">

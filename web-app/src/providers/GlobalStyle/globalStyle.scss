@@ -113,3 +113,14 @@ body{
 .notify_no_friend,.notyfy_friend{
     background: var(--bg-primary) !important;
 }
+
+.onlineStatus{
+    border: none;
+    outline: none;
+    position: absolute;
+    background: none;
+    bottom: -9px;
+    right: 14px;
+    width: 22px;
+    height: 27px;
+}

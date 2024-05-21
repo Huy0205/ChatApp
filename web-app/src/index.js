@@ -1,12 +1,5 @@
-import {
-
-    I18nProvider,
-    ThemeProvider,
-    ConversationProvider,
-    AuthProvider,
-    SocketProvider,
-} from './providers';
-import "./providers/GlobalStyle/globalStyle.scss"
+import { I18nProvider, ThemeProvider, ConversationProvider, AuthProvider, SocketProvider } from './providers';
+import './providers/GlobalStyle/globalStyle.scss';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -18,17 +11,17 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <I18nProvider>
         <AuthProvider>
-            <SocketProvider>
-                <ThemeProvider>
-                    <ConversationProvider>
+            <ConversationProvider>
+                <SocketProvider>
+                    <ThemeProvider>
                         <ViewPortProvider>
                             <PreviewProvider>
                                 <App />
                             </PreviewProvider>
                         </ViewPortProvider>
-                    </ConversationProvider>
-                </ThemeProvider>
-            </SocketProvider>
+                    </ThemeProvider>
+                </SocketProvider>
+            </ConversationProvider>
         </AuthProvider>
     </I18nProvider>,
 );
