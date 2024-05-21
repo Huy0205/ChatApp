@@ -15,7 +15,7 @@ export default function FormRegister({ onSuccess, setIsAuthPhone, onPhoneRegiste
     const { t } = useLang();
 
     const [phone, setPhone] = useState('');
-    const [isOpenModalOTP, setIsOpenModalOTP] = useState(false);
+    const [isOpenModalOTP, setIsOpenModalOTP] = useState(true);
     const [loading, setLoading] = useState(false);
     const [pendingAnimation, setPendingAnimation] = useState(false);
     const auth = configs.firebase.auth;

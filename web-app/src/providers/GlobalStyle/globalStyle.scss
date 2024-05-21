@@ -1,5 +1,10 @@
 @import './variable.scss';
 @import './reset.scss';
+
+body{
+    font-family: "Roboto", sans-serif;
+}
+
 ::-webkit-scrollbar {
     width: 19px;
 }

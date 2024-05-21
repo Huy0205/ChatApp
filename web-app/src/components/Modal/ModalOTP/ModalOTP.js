@@ -35,7 +35,7 @@ export default function ModalOTP({ onClose, onConfirm, onResendOTP, phoneNumber,
                                 <span> {t('Login.modal.content')}</span> <strong>{phoneNumber}</strong>{' '}
                             </p>
                             <p
-                                className="text-primary mt-2"
+                                className="text-primary mt-2  btn_changePhone"
                                 onClick={() => {
                                     onChangePhone();
                                     onClose(false);
@@ -55,7 +55,9 @@ export default function ModalOTP({ onClose, onConfirm, onResendOTP, phoneNumber,
 
                             {seconds === 0 ? (
                                 <div className="text-end mt-3">
-                                    <span className="text-primary" onClick={()=>{
+                                    <span 
+                    
+                                    className="text-primary" onClick={()=>{
                                         onResendOTP()
                                         setSeconds(10);
                                     }}>
