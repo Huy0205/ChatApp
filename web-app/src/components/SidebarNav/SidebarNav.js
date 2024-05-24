@@ -1,17 +1,18 @@
 import './SidebarNav.scss';
-import { NavLink } from "react-router-dom";
-import { useState, useEffect, useRef } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useState, useEffect, useRef, useContext } from 'react';
 import UserPopper from '../Popper/UserPopper/UserPopper';
 import SettingPopper from '../Popper/SettingPopper/SettingPopper';
 import configs from '../../configs';
 import useInfor from '../../hooks/useInfor';
 import clsx from 'clsx';
 import { isBase64Image } from '../../utils/imageUtil';
+import { ConversationContext } from '../../providers/ConversationProvider/ConversationProvider';
 export default function SidebarNav() {
     const user = useInfor();
 
-    const [select, setSelect] = useState("");
-
+    const [select, setSelect] = useState('');
+    const { conversation } = useContext(ConversationContext);
     const [isOpenPopper, setIsOpenPopper] = useState({
         user: false,
         setting: false,
@@ -49,20 +50,19 @@ export default function SidebarNav() {
 
             <div style={{ flex: 1 }}>
                 <div onClick={handleUserClickOpenPopperUser} className="wp_avt">
-
-                    <img
-                        alt="avt"
-                        src={user?.avatarPicture}
-                        className="a-child"
-                    />
+                    <img alt="avt" src={user?.avatarPicture} className="a-child" />
                 </div>
-                <NavLink to={configs.paths.messenger}
-                    className={clsx("nav_item position-relative", ({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "active" : "")}>
-
+                <NavLink
+                    to={configs.paths.messenger}
+                    className={clsx('nav_item position-relative', ({ isActive, isPending }) =>
+                        isPending ? 'pending' : isActive ? 'active' : '',
+                    )}
+                >
                     <i className="fa-solid fa-message nav_icon"></i>
-                    {/* circle num */}
-                    <div className="nav_num">1</div>
+                    {
+                      conversation.totalUnread > 0 && <div className="nav_num">{conversation.totalUnread}</div>  
+                    }
+                   
                 </NavLink>
 
                 <NavLink className=" nav_item position-relative" to={configs.paths.phonebook}>
@@ -71,17 +71,19 @@ export default function SidebarNav() {
             </div>
 
             <div
-                onClick={() => setSelect("tool")}
-                className={clsx(" nav_item position-relative", select == "tool" ? "active" : "")}>
+                onClick={() => setSelect('tool')}
+                className={clsx(' nav_item position-relative', select == 'tool' ? 'active' : '')}
+            >
                 <i className="fa-solid fa-toolbox nav_icon"></i>
             </div>
 
             <div
-
                 onClick={(e) => {
-                    setSelect("setting");
+                    setSelect('setting');
                     handleUserClickOpenPopperSetting(e);
-                }} className={clsx(" nav_item position-relative", select == "setting" ? "active" : "")}>
+                }}
+                className={clsx(' nav_item position-relative', select == 'setting' ? 'active' : '')}
+            >
                 <i className="fa-solid fa-gear nav_icon"></i>
                 {isOpenPopper.setting && <SettingPopper />}
             </div>

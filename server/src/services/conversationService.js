@@ -87,8 +87,15 @@ export const updateLastMessage = async (
 
 export const getConversationByid = async (id) => {
   try {
+
     const conversation = await ConversationModel.findById(id);
-    return conversation;
+  
+
+    if(conversation){
+      return conversation;
+    }
+    return {}
+
   } catch (error) {
     console.log(error);
   }

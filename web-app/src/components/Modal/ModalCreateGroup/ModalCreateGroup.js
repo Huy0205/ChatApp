@@ -220,7 +220,7 @@ function ModalCreateGroup({ onHide, user, group }) {
                                                             selectUser.filter((u) => u._id !== selectUser[index]._id),
                                                         );
                                                     }}
-                                                    class="fa-solid fa-circle-xmark"
+                                                    className="fa-solid fa-circle-xmark"
                                                 ></i>
                                             </div>
                                         );

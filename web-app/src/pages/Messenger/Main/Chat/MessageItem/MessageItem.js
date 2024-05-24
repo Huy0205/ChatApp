@@ -75,7 +75,7 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                                             {(
                                                 <span className={clsx("feeling", item.reaction ? "active_reaction" : "")}>
                                                     {(emojis.index === index && emojis.emojis) || item.reaction || (
-                                                        <i class="fa-regular fa-thumbs-up"></i>
+                                                        <i className="fa-regular fa-thumbs-up"></i>
                                                     )}
                                                     <Picker
                                                         reactionsDefaultOpen={true}

@@ -12,6 +12,7 @@ function Main() {
     const { conversation } = useContext(ConversationContext);
     const { previewFile, setPreviewFile } = useContext(PreviewContext);
     const { view, isViewConversation } = useContext(ViewPortContext);
+    console.log('conversation >>>>', conversation);
     return (
         <div id="main_container" className={clsx('d-flex', !view.chat ? 'd-none' : '')}>
             {previewFile && (
@@ -37,7 +38,7 @@ function Main() {
                         className="button-close-previewFile"
                         aria-label="Close"
                     >
-                        <i class="fa-solid fa-xmark"></i>
+                        <i className="fa-solid fa-xmark"></i>
                     </button>
                 </>
             )}

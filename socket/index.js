@@ -34,12 +34,13 @@ const getUserIdBySocketId = (socketId) => {
 io.on("connection", (socket) => {
   //when user connect
   console.log("a user connected.");
-
+ console.log("a user connected>>>",users);
   //take userId and socketId from user
   socket.on("addUser", (userId) => {
     addUser(userId, socket.id);
-    console.log("users connection :>>>", users);
     io.emit("getUsers", users);
+    
+  
   });
 
   //send and get message
@@ -126,10 +127,6 @@ io.on("connection", (socket) => {
   socket.on(
     "reRenderConversations",
     ({ members, conversationId, unseen, lastMessage, sendAt }) => {
-      console.log("sendAt :>> ", sendAt);
-      console.log("members :>> ", members);
-      console.log("conversationId :>> ", conversationId);
-      console.log("unseen :>> ", unseen);
       users
         .filter((user) => members.includes(user.userId))
         .forEach((user) => {

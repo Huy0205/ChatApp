@@ -55,9 +55,9 @@ const Chat = ({ route }) => {
                 for (let i = 0; i < messages.length - 1; i++) {
                     for (let j = i + 1; j < messages.length; j++) {
                         messages[j].prevSenderId = messages[i].senderId._id;
+                    
                     }
                 }
-
                 // Đảo ngược mảng tin nhắn để hiển thị tin nhắn mới nhất ở cuối
                 setMessages(messages.reverse());
             } catch (error) {
