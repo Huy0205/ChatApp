@@ -10,6 +10,6 @@ router.post("/sort",async (req,res)=>{
   const x= await ConversationModel.find({}).sort({updatedAt: -1})
   res.status(200).json(x)
 });
-
+router.get("/notGroup/:currentUserId", conversationController.handleGetConversationNotGroup);
 
 export default router

@@ -25,21 +25,15 @@ export const createConversation = async (senderid, recieverid, type) => {
     }
 
     return await new_conversation.save();
-
-
-
   } catch (error) {
     console.log(error);
   }
 };
 export const getConversationByUserId = async (senderid) => {
   try {
-
-
     const conversations = await ConversationModel.find({
       members: { $in: [senderid] },
     }).sort({ updatedAt: -1 });
-
 
     const consRes = [];
     if (conversations.length === 0) {
@@ -48,8 +42,6 @@ export const getConversationByUserId = async (senderid) => {
 
     //check if conversation has message
     for (let i = 0; i < conversations.length; i++) {
-
-
       if (conversations[i].lastMessage !== "") {
         consRes.push(conversations[i]);
       }
@@ -61,7 +53,11 @@ export const getConversationByUserId = async (senderid) => {
   }
 };
 
-export const updateLastMessage = async (conversationId, lastMessage, senderid) => {
+export const updateLastMessage = async (
+  conversationId,
+  lastMessage,
+  senderid
+) => {
   try {
     //update and sort by updateAt
     await ConversationModel.findByIdAndUpdate(
@@ -79,7 +75,9 @@ export const updateLastMessage = async (conversationId, lastMessage, senderid) =
     );
 
     // Now, let's sort conversations based on updatedAt field
-    const sortedConversations = await ConversationModel.find().sort({ updatedAt: -1 });
+    const sortedConversations = await ConversationModel.find().sort({
+      updatedAt: -1,
+    });
 
     return sortedConversations;
   } catch (error) {
@@ -87,12 +85,24 @@ export const updateLastMessage = async (conversationId, lastMessage, senderid) =
   }
 };
 
-
 export const getConversationByid = async (id) => {
   try {
-
-    const conversation= await ConversationModel.findById(id);
+    const conversation = await ConversationModel.findById(id);
     return conversation;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Lấy Tất cả conversation không phải group theo user hiện tại
+export const getConversationNotGroupByUserId = async (currentUserId) => {
+  try {
+    const conversations = await ConversationModel.find({
+      members: { $in: [currentUserId] },
+      isGroup: false,
+    }).sort({ updatedAt: -1 });
+
+    return conversations;
   } catch (error) {
     console.log(error);
   }

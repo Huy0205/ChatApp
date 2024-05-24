@@ -34,9 +34,6 @@ const Conversation = ({ userOrGroup, _id, lastMessage, isGroup, numberOfUnseenMe
         // Update conversation mới được chọn vào context
         setCurrentConversation(avatar, name, idOther, isGroup, members, _id);
 
-        // thêm user_id vào isSeen của các tin nhắn chưa xem
-        await MessageService.updateSeenMessages(_id, currentUserId);
-
         navigation.navigate('Chat', {userOrGroup, isGroup});
     };
 

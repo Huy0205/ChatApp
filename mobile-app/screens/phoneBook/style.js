@@ -1,29 +1,41 @@
 import { StyleSheet } from 'react-native';
-
-const TEXT = {
-    fontSize: 12,
-};
+import myColors from '../../constants/colors';
+import { font_16 } from '../../constants/font';
 
 const styles = StyleSheet.create({
-    btnSearch: {
+    container: {
+        flex: 1,
+        backgroundColor: myColors.first,
+    },
+    btnActiveWrapper: {
         flexDirection: 'row',
+        backgroundColor: myColors.first,
+    },
+    btnActive: {
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        padding: 10,
+        margin: 10,
     },
-    iconSearch: {
-        width: 20,
-        height: 22,
-        resizeMode: 'contain',
-        marginRight: 8,
+    btnActiveText: {
+        ...font_16,
     },
-    btnSearchText: {
-        ...TEXT,
-        color: '#EBE2E2',
+    actionInFriend: {
+        marginBottom: 10,
+        backgroundColor: myColors.first,
     },
-    iconAddFriend: {
-        width: 23,
-        height: 23,
-        resizeMode: 'contain',
+    btnInFriend: {
+        flexDirection: 'row',
+        paddingHorizontal: 20,
+        paddingVertical: 12,
+    },
+    btnInFriendText: {
+        ...font_16,
+        marginLeft: 10,
+    },
+    listUser: {
+        flex: 1,
+        backgroundColor: myColors.first,
     },
 });
 

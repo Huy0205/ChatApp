@@ -51,3 +51,16 @@ export const handleUpdateLastMessage = async (req, res) => {
   return res.status(500).json({ message: "Internal Server Error" });
 
 }
+
+export const handleGetConversationNotGroup = async (req, res) => {
+  const { currentUserId } = req.params;
+  console.log(currentUserId)
+  if (!currentUserId) {
+    return res.status(400).json({ message: "missing param" });
+  }
+  const data = await conversationService.getConversationNotGroupByUserId(currentUserId);
+  if (data) {
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}

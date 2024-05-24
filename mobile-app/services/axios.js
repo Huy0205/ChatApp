@@ -3,7 +3,8 @@ import axiosRetry from 'axios-retry';
 axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-    baseURL: 'http://192.168.78.133:8080/api/v1',
+    // baseURL: 'http://192.168.1.91:8080/api/v1',
+    baseURL: 'https://serverzaloclone-render.onrender.com/api/v1',
 });
 instance.interceptors.response.use(
     function (response) {

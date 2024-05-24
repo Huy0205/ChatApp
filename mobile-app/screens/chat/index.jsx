@@ -37,7 +37,6 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const Chat = ({ route }) => {
-    console.log(route.params);
     const navigation = useNavigation();
     const { currentUserId, socket } = useContext(socketContext);
     const { conversation } = useContext(ConversationContext);
@@ -325,16 +324,19 @@ const Chat = ({ route }) => {
         }
     };
 
+    const goBack = async () => {
+        await MessageService.updateSeenMessages(conversation._id, currentUserId);
+        socket.emit('reRenderConversations', { members: [currentUserId] });
+        // render lại Conversations
+        navigation.goBack();
+    }
+
     return (
         <View style={styles.container}>
             <Header
                 left={{
                     icon: faArrowLeftLong,
-                    onPress: () => {
-                        socket.emit('reRenderConversations', { members: [currentUserId] });
-                        // render lại Conversations
-                        navigation.goBack();
-                    },
+                    onPress: goBack,
                     avatarUri: route.params.isGroup
                         ? route.params.userOrGroup.groupPicture
                         : route.params.userOrGroup.avatarPicture,

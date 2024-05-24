@@ -19,6 +19,7 @@ import {
 import { updateUser, updateBlockUser } from '../../services/userService';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AuthContext } from '../../providers/Auth/AuthProvider';
+import { sendRequestFriend } from '../../services/requestFriendService';
 
 const Information = ({ route }) => {
     const navigation = useNavigation();
@@ -109,7 +110,23 @@ const Information = ({ route }) => {
     };
 
     const handleAddFriend = () => {
-
+        Alert.alert('Thông báo', 'Bạn có muốn gửi lời mời kết bạn không?', [
+            {
+                text: 'Hủy',
+            },
+            {
+                text: 'Gửi',
+                onPress: async () => {
+                    await sendRequestFriend(user._id, userOld._id)
+                        .then((res) => {
+                            Alert.alert('Thông báo', 'Đã gửi lời mời kết bạn');
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                },
+            },
+        ]);
     };
 
     const handleGoBack = () => {
@@ -182,7 +199,7 @@ const Information = ({ route }) => {
                             <Text style={[styles.text, { color: myColors.third }]}>{userUpdate.phonenumber}</Text>
                         </View>
                         <View style={[styles.field, { paddingTop: 5, paddingBottom: 5 }]}>
-                            <View style={{justifyContent: 'flex-end'}}>
+                            <View style={{ justifyContent: 'flex-end' }}>
                                 <Text style={styles.text}>Tên hiển thị:</Text>
                             </View>
                             <TextInput

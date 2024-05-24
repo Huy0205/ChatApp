@@ -47,7 +47,7 @@ const Conversations = () => {
         } catch (error) {
             console.error(error);
         }
-    }, [currentUserId, setConversations, setUnseenMessages]);
+    }, []);
 
     useEffect(() => {
         socket.on('reRenderConversations', onRerenderConversations);

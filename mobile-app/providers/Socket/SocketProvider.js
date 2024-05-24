@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { io } from 'socket.io-client';
 import { AuthContext } from '../Auth/AuthProvider';
 import { useContext, useEffect } from 'react';
@@ -8,7 +8,7 @@ export const socketContext = React.createContext();
 function SocketProvider({ children }) {
     const { user } = useContext(AuthContext);
 
-    const socket = io('ws://192.168.78.133:9000');
+    const [socket] = useState(io('https://socketzaloclone-render.onrender.com/api/v1'));
 
     useEffect(() => {
         if (!user._id) return;
