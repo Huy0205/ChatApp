@@ -3,7 +3,7 @@ import { useState } from 'react';
 export const ConversationContext = React.createContext();
 function ConversationProvider({ children }) {
     const [conversation, setConversation] = useState({
-        recieveInfor: {}, _id: "",onlineUsers:[]
+        recieveInfor: {}, _id: "",onlineUsers:[],totalUnread:0
     });
     console.log("conversation dc set >>",conversation)
     const setCurrentConversation = (avatar, name, _id, isGroup, members, conversationId) => {
@@ -20,7 +20,10 @@ function ConversationProvider({ children }) {
     const getMembers = () => {
         return conversation.recieveInfor.members;
     }
-    return <ConversationContext.Provider value={{ setOnlineUsers,conversation, setMembers, setCurrentConversation, getMembers}}>{children}</ConversationContext.Provider>;
+    const setTotalUnread = (totalUnread) => {
+        setConversation({ ...conversation, totalUnread });
+    }
+    return <ConversationContext.Provider value={{ setOnlineUsers,conversation, setMembers, setCurrentConversation, getMembers,setTotalUnread}}>{children}</ConversationContext.Provider>;
 }
 
 export default ConversationProvider;

@@ -252,8 +252,6 @@ function Chat() {
     //đăng kí socket nhận tin nhắn
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
-            console.log('new_message', new_message);
-            console.log(conversationId, conversation._id);
             if (conversationId === conversation._id) {
                 setMessages((prev) => [...prev, new_message]);
             }

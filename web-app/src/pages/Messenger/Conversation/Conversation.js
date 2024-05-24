@@ -16,7 +16,7 @@ const Conversation = () => {
     const { view } = useContext(ViewPortContext);
 
     const { socket, currentUserId } = useContext(socketContext);
-    const { conversation } = useContext(ConversationContext);
+    const { conversation,setTotalUnread } = useContext(ConversationContext);
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
     const conversationRef = useRef(conversation);
@@ -28,6 +28,7 @@ const Conversation = () => {
         try {
             //get toàn bộ conversation
             const conversations = await conversationService.getConversationByUserId(currentUserId);
+            let totalUnread=0;
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
                 conversations[i].timeDuaration = timeDuaration(conversations[i].updatedAt);
@@ -35,14 +36,15 @@ const Conversation = () => {
                 const totalUnseen = await messageService.countUnseenMessage(conversationID, currentUserId);
                 //thêm trường totalUnseen vào mảng object conversation
                 conversations[i].totalUnseen = typeof totalUnseen === 'number' ? totalUnseen : totalUnseen.data;
-
+                totalUnread+=conversations[i].totalUnseen;
                 const members = conversations[i].members.filter((u) => u !== currentUserId);
                 conversations[i].isOnline = !conversations[i].isGroup
                     ? conversation.onlineUsers.some((u) => u.userId === members[0])
                     : false;
             }
-
+            console.log(totalUnread)
             setConversations([...conversations]);
+            setTotalUnread(totalUnread)
         } catch (err) {
             console.log(err);
         }
@@ -61,22 +63,24 @@ const Conversation = () => {
     const handleRerenderConversation = async (conversationId, unseen, lastmessage, sendAt) => {
         let i = 0;
         let flag = false;
-        console.log('conversations co chay vo day ne >>>>>', conversations);
+        let current_total_unseen = conversation.totalUnread;
         conversations.forEach((con, index) => {
             if (con._id === conversationId) {
                 i = index;
                 flag = true;
                 const totalunseen = con.totalUnseen;
-
-                console.log('currentConversation', conversation._id);
                 if (conversation._id == conversationId) {
                     con.totalUnseen = 0;
+                    current_total_unseen -= totalunseen;
                 } else {
                     con.totalUnseen = unseen + totalunseen;
+                    console.log("có chạy");
+                    current_total_unseen =current_total_unseen+1;
+                    console.log("current_total_unseen >>>",current_total_unseen);
+
                 }
                 con.lastMessage = lastmessage ? lastmessage : con.lastMessage;
                 con.timeDuaration = sendAt ? timeDuaration(sendAt) : con.timeDuaration;
-                console.log('con.timeDuaration', con.timeDuaration);
             }
         });
 
@@ -84,6 +88,7 @@ const Conversation = () => {
             const new_conversation = await conversationService.getConversationById(conversationId);
             new_conversation.timeDuaration = timeDuaration(new_conversation.updatedAt);
             new_conversation.totalUnseen = new_conversation.lastSenderid === currentUserId ? 0 : unseen;
+            current_total_unseen +=new_conversation.totalUnseen
             if (new_conversation.lastMessage) {
                 conversations.unshift(new_conversation);
 
@@ -92,7 +97,8 @@ const Conversation = () => {
             }
         } else {
             if (!unseen && !lastmessage) {
-                setConversations((prev) => [...prev]);
+                setConversations(prev => [...prev]); 
+                setTotalUnread(current_total_unseen);
                 return;
             }
 
@@ -102,9 +108,11 @@ const Conversation = () => {
                 newArray = [element, ...conversations.slice(0, i), ...conversations.slice(i + 1)]; // Tạo mảng mới với phần tử được di chuyển lên đầu
             }
             newArray.length > 0 && setConversations([...newArray]);
+              setTotalUnread(current_total_unseen);
             return;
         }
-        setConversations((prev) => [...prev]);
+
+      
     };
 
     useEffect(() => {
@@ -120,11 +128,11 @@ const Conversation = () => {
     }, [conversations, conversation._id]);
 
     useEffect(() => {
-        if (activeFilter && conversations.length > 0) {
+        if (activeFilter && conversationRef.current.length > 0) {
             setConversations([...conversationRef.current]);
         } else {
             const filterConversations = conversations.filter((item) => item.totalUnseen > 0);
-            console.log('filterConversations', filterConversations);
+
             conversationRef.current = conversations;
             setConversations([...filterConversations]);
         }
