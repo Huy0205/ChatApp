@@ -8,7 +8,9 @@ export const socketContext = React.createContext();
 function SocketProvider({ children }) {
     const { user } = useContext(AuthContext);
 
-    const [socket] = useState(io('https://socketzaloclone-render.onrender.com/api/v1'));
+    // const [socket] = useState(io('ws://192.168.1.91:9000'));
+    const [socket] = useState(io('https://socketzaloclone-render.onrender.com'));
+
 
     useEffect(() => {
         if (!user._id) return;

@@ -31,6 +31,7 @@ import { socketContext } from '../../providers/Socket/SocketProvider';
 import { ConversationContext } from '../../providers/ConversationProvider/ConversationProvider';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
+import EmojiSelector from 'react-native-emoji-selector';
 import myColors from '../../constants/colors';
 
 const windowWidth = Dimensions.get('window').width;
@@ -44,18 +45,19 @@ const Chat = ({ route }) => {
     const [text, setText] = useState('');
     const [isShowFunctions, setIsShowFunctions] = useState(false);
     const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+    const [isShowEmoji, setIsShowEmoji] = useState(false);
     const [keyboardHeight, setKeyboardHeight] = useState(254.90908813476562);
     const [actionHeight, setActionHeight] = useState(0);
     const txtRef = useRef(null);
 
     useEffect(() => {
+        console.log('conversation', conversation);
         const getMessages = async () => {
             try {
                 const messages = await MessageService.getMessageByConversationId(conversation._id);
                 for (let i = 0; i < messages.length - 1; i++) {
                     for (let j = i + 1; j < messages.length; j++) {
                         messages[j].prevSenderId = messages[i].senderId._id;
-                    
                     }
                 }
                 // Đảo ngược mảng tin nhắn để hiển thị tin nhắn mới nhất ở cuối
@@ -164,8 +166,10 @@ const Chat = ({ route }) => {
     // Nhận tin nhắn
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
-            
+            console.log('new_message', new_message);
             if (conversationId === conversation._id) {
+                console.log('new_message co chay vo', new_message);
+
                 new_message.prevSenderId = messages.length > 0 ? messages[0].senderId._id : null;
                 setMessages((prev) => [new_message, ...prev]);
             }
@@ -201,7 +205,6 @@ const Chat = ({ route }) => {
     //đăng kí socket nhận tin nhắn đã xóa
     useEffect(() => {
         const onMessageDelete = async ({ conversationId, new_message }) => {
-        
             if (conversationId === conversation._id) {
                 setMessages((prev) => {
                     prev.forEach((message) => {
@@ -222,7 +225,6 @@ const Chat = ({ route }) => {
     // đăng kí socket nhận tin nhắn đã thu hồi
     useEffect(() => {
         const onRecallMessage = async ({ conversationId, new_message }) => {
-       
             if (conversationId === conversation._id) {
                 setMessages((prev) => {
                     prev.forEach((message) => {
@@ -328,8 +330,8 @@ const Chat = ({ route }) => {
         await MessageService.updateSeenMessages(conversation._id, currentUserId);
         socket.emit('reRenderConversations', { members: [currentUserId] });
         // render lại Conversations
-        navigation.goBack();
-    }
+        navigation.navigate('Conversations');
+    };
 
     return (
         <View style={styles.container}>
@@ -464,6 +466,18 @@ const Chat = ({ route }) => {
                         </TouchableOpacity>
                         <View style={styles.itemModal}></View>
                     </View>
+                </View>
+            )}
+            {isShowEmoji && (
+                <View style={styles.emoji}>
+                    <EmojiSelector
+                        category={Categories.all}
+                        onEmojiSelected={handleSelectEmoji}
+                        showSearchBar={false}
+                        showTabs={true}
+                        columns={8}
+                        style={{ width: '100%', height: '50%' }}
+                    />
                 </View>
             )}
         </View>

@@ -9,8 +9,9 @@ const io = require("socket.io")(9000, {
       "exp://192.168.1.22:8081",
       "exp://192.168.1.8:8081",
       "exp://192.168.1.91:8081",
+      "*"
     ],
-  },
+  }
 });
 
 let users = [];
@@ -48,6 +49,11 @@ io.on("connection", (socket) => {
     "sendMessage",
     ({ senderId, conversationId, new_message, members }) => {
 
+      console.log("members>>>",members);
+      console.log("senderId>>>",senderId);
+      console.log("conversationId>>>",conversationId);
+      console.log("new_message>>>",new_message);
+      
       members
         .filter((member) => member != senderId)
         .forEach((member) => {

@@ -1,9 +1,13 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 export const FriendRequsetContext = createContext();
 
 const FriendRequsetProvider = ({ children }) => {
     const [numberOfFriendRequset, setNumberOfFriendRequset] = useState(0);
+
+    useEffect(() => {
+        
+    },[]);
 
     return (
         <FriendRequsetContext.Provider value={{ numberOfFriendRequset, setNumberOfFriendRequset }}>

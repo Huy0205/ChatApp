@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo_full.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.tanhuy.ChatApp"
     },
     "web": {
       "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4ae0a006-3a8d-403f-bd13-023210910d5f"
+      }
     }
   }
 }

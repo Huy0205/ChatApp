@@ -6,8 +6,42 @@ import Header from '../../components/header';
 import { useNavigation } from '@react-navigation/native';
 import styles from './style';
 import myColors from '../../constants/colors';
+import { requestAcceptPhoneBookPermission } from '../../constants/requestPermission';
+import * as Contacts from 'expo-contacts';
+import { getUserByPhone } from '../../services/userService';
 
 function renderFriends() {
+    const navigation = useNavigation();
+    const [phoneBook, setPhoneBook] = React.useState([]);
+    const handleShowPhoneBook = async () => {
+        const permission = requestAcceptPhoneBookPermission();
+        if (permission) {
+            try {
+                const { data } = await Contacts.getContactsAsync({
+                    fields: [Contacts.Fields.PhoneNumbers],
+                });
+                data.forEach(async (item) => {
+                    if (item.phoneNumbers) {
+                        const phoneNumber = item.phoneNumbers[0].number;
+                        let temp;
+                        if (phoneNumber.startsWith('+84')) {
+                            temp = phoneNumber;
+                        } else {
+                            const digitsOnly = phoneNumber.replace(/\D/g, '');
+                            temp = `+84${digitsOnly.slice(1)}`;
+                        }
+                        const user = await getUserByPhone(temp);
+                        if (user) {
+                            setPhoneBook((prev) => [...prev, user]);
+                        }
+                    }
+                });
+                navigation.navigate('ShowPhoneBook', { users: phoneBook });
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    };
 
     return (
         <View style={[styles.container, { backgroundColor: myColors.second }]}>
@@ -16,7 +50,7 @@ function renderFriends() {
                     <FontAwesomeIcon icon={faUserGroup} size={25} color={myColors.main} />
                     <Text style={styles.btnInFriendText}>Lời mời kết bạn</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnInFriend}>
+                <TouchableOpacity style={styles.btnInFriend} onPress={handleShowPhoneBook}>
                     <FontAwesomeIcon icon={faAddressBook} size={25} color={myColors.main} />
                     <Text style={styles.btnInFriendText}>Danh bạ máy</Text>
                 </TouchableOpacity>

@@ -49,3 +49,8 @@ export const updateImageUser = (_id, formData) => {
 export const updateBlockUser = (currentUserId, userIdBlock) => {
     return axios.put(`/user/blocks/${currentUserId}`, { userIdBlock });
 }
+
+// api get user theo số điện thoại
+export const getUserByPhone = (phone) => {
+    return axios.get(`/user/phone/${phone}`);
+}

@@ -17,4 +17,5 @@ router.post("/addFriend", userController.handleAddFriend);
 router.put("/:id", userController.handleUpdateInformationUser);
 router.put("/updateAvatar/:id", uploadImage.single('file'), userController.handleUpdateImageUser);
 router.put("/blocks/:id", userController.handleUpdateBlocks);
+router.get("/phone/:phone", userController.handleGetUserByPhone);
 export default router;  

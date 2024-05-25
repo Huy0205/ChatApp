@@ -20,9 +20,11 @@ import { updateUser, updateBlockUser } from '../../services/userService';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AuthContext } from '../../providers/Auth/AuthProvider';
 import { sendRequestFriend } from '../../services/requestFriendService';
+import { socketContext } from '../../providers/Socket/SocketProvider';
 
 const Information = ({ route }) => {
     const navigation = useNavigation();
+    const socket = useContext(socketContext);
     const { user, setUser } = useContext(AuthContext);
     const [bgPictureSize, setBgPictureSize] = useState(null);
     const [avatarSize, setAvatarSize] = useState(null);
@@ -120,6 +122,7 @@ const Information = ({ route }) => {
                     await sendRequestFriend(user._id, userOld._id)
                         .then((res) => {
                             Alert.alert('Thông báo', 'Đã gửi lời mời kết bạn');
+                            socket.emit('sendRequestFriend', { recieverId });
                         })
                         .catch((err) => {
                             console.log(err);

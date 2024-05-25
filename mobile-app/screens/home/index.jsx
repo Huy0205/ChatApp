@@ -8,8 +8,6 @@ const Home = () => {
     const navigation = useNavigation();
     const [language, setLanguage] = useState('Vietnamese');
 
-    console.log('render home');
-
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={myColors.first} />

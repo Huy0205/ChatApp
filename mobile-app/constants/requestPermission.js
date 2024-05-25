@@ -1,10 +1,12 @@
 import { Camera } from 'expo-camera';
+import * as Contacts from 'expo-contacts';
 
 export const requestCameraPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync({
-        permissionDialogTitle: 'Yêu cầu Quyền Sử dụng Camera',
-        permissionDialogMessage:
-            'Ứng dụng cần quyền truy cập vào camera của bạn để có thể sử dụng tính năng này. Vui lòng cấp quyền truy cập để tiếp tục.',
-    });
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    return status === 'granted';
+};
+
+export const requestAcceptPhoneBookPermission = async () => {
+    const { status } = await Contacts.requestPermissionsAsync();
     return status === 'granted';
 };

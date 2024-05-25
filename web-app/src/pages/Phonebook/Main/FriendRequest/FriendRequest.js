@@ -22,6 +22,8 @@ export default function FriendRequest() {
         const onGetFriendRequest = () => {
             fetchFriendRequest();
         };
+
+        //um
         socket.on('getFriendRequest', onGetFriendRequest);
         return () => {
             socket.off('getFriendRequest', onGetFriendRequest);

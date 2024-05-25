@@ -74,3 +74,6 @@ export const checkSendRequestFriend = async (senderId, recieverId) => {
     console.log(error);
   }
 };
+
+// Đếm số lượng lời mời kết bạn chưa chưa chấp nhận
+

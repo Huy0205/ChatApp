@@ -102,3 +102,15 @@ export const handleUpdateBlocks = async (req, res) => {
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
+
+export const handleGetUserByPhone = async (req, res) => {
+  const { phone } = req.params;
+  if (!phone) {
+    return res.status(400).json({ message: "missing param" });
+  }
+  const data = await userServices.getUserByPhone(phone);
+  if (data) {
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+};

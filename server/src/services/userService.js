@@ -186,3 +186,12 @@ export const updateBlocks = async (currentUserId, userIdBlock) => {
     console.log(error);
   }
 };
+
+export const getUserByPhone = async (phone) => {
+  try {
+    const user = await UserModel.findOne({ phonenumber: phone });
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+};

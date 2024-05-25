@@ -20,6 +20,8 @@ import { getUserById } from '../../services/userService';
 import { socketContext } from '../../providers/Socket/SocketProvider';
 import myColors from '../../constants/colors';
 import { addGroup } from '../../services/groupService';
+import {createConversation} from '../../services/conversationService';
+import { ConversationContext } from '../../providers/ConversationProvider/ConversationProvider';
 
 const CreateGroup = () => {
     const navigation = useNavigation();
@@ -30,6 +32,8 @@ const CreateGroup = () => {
     const [listUser, setListUser] = useState([]);
     const [selectedUserList, setSelectedUserList] = useState([]);
     const [groupName, setGroupName] = useState('');
+    const { setCurrentConversation } = useContext(ConversationContext);
+    const { socket } = useContext(socketContext);
 
     useEffect(() => {
         getConversationsNotGroupByCurrentUserId(currentUserId)
@@ -55,18 +59,35 @@ const CreateGroup = () => {
             Alert.alert('Nhóm tối thiểu phải có 3 người', 'Vui lòng chọn thêm người để tạo nhóm');
             return;
         }
-        if(groupName === '') {
+        if (groupName === '') {
             Alert.alert('Vui lòng nhập tên nhóm');
             return;
         }
-        if(avatarGroup === undefined) {
-            avatarGroup = avtarGroupAvailble[Math.floor(Math.random() * avtarGroupAvailble.length)];
-        }
         const members = selectedUserList.map((user) => user._id);
         members.push(currentUserId);
-        addGroup(groupName, members, currentUserId, avatarGroup)
-            .then((data) => {
-                navigation.navigate('Chat', { id: data._id });
+        addGroup(
+            groupName,
+            members,
+            currentUserId,
+            avatarGroup ? avatarGroup : avtarGroupAvailble[Math.floor(Math.random() * avtarGroupAvailble.length)],
+        )
+            .then(async (data) => {
+                var new_conversation = await createConversation(data._id, members, 1);
+                setCurrentConversation(
+                    data.groupPicture,
+                    data.groupName,
+                    data._id,
+                    true,
+                    data.members,
+                    new_conversation._id,
+                );
+                socket.emit('reRenderConversations', {
+                    members: members,
+                    unseen: 1,
+                    conversationId: new_conversation?._id,
+                    sendAt: new Date().toISOString(),
+                });
+                navigation.navigate('Chat', { userOrGroup: data, isGroup: true });
             })
             .catch((err) => {
                 console.log(err);
@@ -99,7 +120,7 @@ const CreateGroup = () => {
                 left={{
                     icon: faArrowLeftLong,
                     onPress: () => {
-                        navigation.goBack();
+                        navigation.navigate('Conversations');
                     },
                     text: 'Tạo nhóm mới',
                 }}
